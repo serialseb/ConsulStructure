@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("ConsulStructure")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("No-frill, no-dependency consul configuration")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Sebastien Lambla")]
 [assembly: AssemblyProduct("ConsulStructure")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCopyright("Copyright © 2017 Sebastien Lambla")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

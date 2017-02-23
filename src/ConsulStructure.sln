@@ -7,7 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsulStructure", "ConsulSt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{6C65AEBC-8733-40D6-B549-AA61F3769C4A}"
 ProjectSection(SolutionItems) = preProject
-	..\..\README.md = ..\..\README.md
+	..\README.md = ..\README.md
+	..\LICENSE.md = ..\LICENSE.md
+	..\ConsulStructure.nuspec = ..\ConsulStructure.nuspec
 EndProjectSection
 EndProject
 Global

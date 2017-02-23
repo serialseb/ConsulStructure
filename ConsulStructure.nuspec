@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>ConsulStructure</id>
+    <version>$version$</version>
+    <title>ConsulStructure</title>
+    <authors>Sebastien Lambla</authors>
+    <owners>Sebastien Lambla</owners>
+    <developmentDependency>true</developmentDependency>
+    <licenseUrl>https://github.com/serialseb/ConsulStructure/tree/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/serialseb/ConsulStructure/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>No-frill no-dependency consul configuration</description>
+    <copyright>Copyright 2017 Sebastien Lambla</copyright>
+    <tags>Consul Configuration</tags>
+    <contentFiles>
+      <files include="contentFiles\cs\**\*.*" buildAction="compile" />
+    </contentFiles>
+    <dependencies>
+      <dependency id="System.Net.Http" version="4.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="src/ConsulStructure/**/*.cs" exclude="src/ConsulStructure/bin/**/*.*;src/ConsulStructure/obj/**/*.*;src/ConsulStructure/Properties/**/*.*;src/ConsulStructure/Tests/**/*" target="contentFiles\cs\any" />
+    <file src="src/ConsulStructure/**/*.cs" exclude="src/ConsulStructure/bin/**/*.*;src/ConsulStructure/obj/**/*.*;src/ConsulStructure/Properties/**/*.*;src/ConsulStructure/Tests/**/*" target="content\App_Packages\ConsulStructure.$version$" />
+  </files>
+</package>
