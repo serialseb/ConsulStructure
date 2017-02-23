@@ -4,7 +4,7 @@ namespace ConsulStructure
 {
     partial class Structure
     {
-        internal class Options
+        internal partial class Options
         {
             public Uri ConsulUri { get; set; } = new Uri("http://localhost:8500");
 
