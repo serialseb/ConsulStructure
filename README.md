@@ -19,24 +19,15 @@ no frills.
 
 ```csharp
 var configuration = my ProjectConfiguration {
-  MyValue = "a very good value",
+  MyValue = "a very good value", // key: /myvalue
   Subconfiguration = {
-    IsStructureAwesome = true
+    IsStructureAwesome = true // key: /subconfiguration/isstructureawesome
   }
 };
 var updater = Structure.New(configuration);
 ```
 
 Your configuration class can have any level of nesting, it's up to you what it looks like.
-
-```chsarp
-public class ProjectConfiguration {
-  // consul key is /myvalue
-  public string MyValue { get; set; }
-  public SubConfiguration Sub { get; set; }
-}
-```
-
 Any change to consul is reflected immediately in your class.
 
 ## Supported types
