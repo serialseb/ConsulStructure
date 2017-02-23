@@ -62,7 +62,6 @@
     <Compile Include="Options\Structure.Events.cs" />
     <Compile Include="Options\Structure.Factories.cs" />
     <Compile Include="Options\Structure.Options.cs" />
-    <Compile Include="Structure.KV.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleJson.cs" />
     <Compile Include="Structure.BlockingHttpWatcher.cs" />
