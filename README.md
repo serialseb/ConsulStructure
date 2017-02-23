@@ -46,9 +46,9 @@ json using the excellent SimpleJson library.
 
 ## Things to do
 
- - [ ] Test HTTP part of the library
+ - [x] Test HTTP part of the library
  - [ ] Create AppVeyor / Travis build
- - [ ] Create nuget package
+ - [x] Create nuget package
  - [ ] Add all base datatype converters
  - [ ] Add converters for go's way of writing data (dates and timespans come to mind)
 

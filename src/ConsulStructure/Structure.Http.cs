@@ -21,7 +21,7 @@ namespace ConsulStructure
                 Func<string, IEnumerable<KeyValuePair<string, byte[]>>> parser)
             {
                 var response = await client.GetAsync(
-                    CreateKvPrefixUri(prefix, timeout, existingIndex), HttpCompletionOption.ResponseContentRead,
+                    CreateKvPrefixUri(prefix, timeout, existingIndex),
                     cancel);
                 var indexResponseHeader = response.Headers.GetValues("X-Consul-Index").LastOrDefault();
 
@@ -38,9 +38,9 @@ namespace ConsulStructure
 
             static Uri CreateKvPrefixUri(string prefix, TimeSpan wait, int index)
             {
-                var indexParam = index == 0 ? "" : $"&existingIndex={index}";
+                var indexParam = index == 0 ? "" : $"&index={index}";
                 return new Uri(
-                    $"/v1/kv/{EnsureUnslashed(prefix)}?wait={wait.TotalSeconds}s{indexParam}&existingIndex=existingIndex&recurse",
+                    $"/v1/kv/{EnsureUnslashed(prefix)}?wait={wait.TotalSeconds}s{indexParam}&recurse",
                     UriKind.Relative);
             }
 

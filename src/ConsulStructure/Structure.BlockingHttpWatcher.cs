@@ -12,17 +12,17 @@ namespace ConsulStructure
         {
             readonly Action<KeyValuePair<string, byte[]>> _configurationReceived;
             readonly Options _options;
-            readonly HttpClient _client = new HttpClient();
+            readonly HttpClient _client;
             readonly CancellationTokenSource _dispose = new CancellationTokenSource();
             readonly Task _loop;
 
-            public BlockingHttpWatcher(Action<KeyValuePair<string, byte[]>> configurationReceived,
+            public BlockingHttpWatcher(
+                Action<KeyValuePair<string, byte[]>> configurationReceived,
                 Options options)
             {
                 _configurationReceived = configurationReceived;
                 _options = options;
-                _client.BaseAddress = options.ConsulUri;
-
+                _client = _options.Factories.HttpClient(_options);
                 _loop = Run();
             }
 

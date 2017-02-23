@@ -20,10 +20,10 @@
 // VERSION: 0.38.0
 
 // NOTE: uncomment the following line to make SimpleJson class internal.
-//#define SIMPLE_JSON_INTERNAL
+#define SIMPLE_JSON_INTERNAL
 
 // NOTE: uncomment the following line to make JsonArray and JsonObject class internal.
-//#define SIMPLE_JSON_OBJARRAYINTERNAL
+#define SIMPLE_JSON_OBJARRAYINTERNAL
 
 // NOTE: uncomment the following line to enable dynamic support.
 //#define SIMPLE_JSON_DYNAMIC
@@ -477,7 +477,7 @@ namespace Json
         /// </returns>
         public override IEnumerable<string> GetDynamicMemberNames()
         {
-            foreach (var key in Keys)
+            foreach (var key in key_discovery)
                 yield return key;
         }
 #endif
