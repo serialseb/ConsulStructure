@@ -55,5 +55,5 @@ json using the excellent SimpleJson library.
 ## Credits
 
 This project is inspired by the excellent functionality provided by the Go-based
-[consulstructure](https://github.com/mitchellh/consulstructure/], and uses
+[consulstructure](https://github.com/mitchellh/consulstructure/), and uses
 [SimpleJson](https://github.com/facebook-csharp-sdk/simple-json) for embeded json serialisation.
