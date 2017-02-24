@@ -42,9 +42,8 @@ namespace ConsulStructure
                             idx,
                             _options.Converters.KeyParser);
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        Console.WriteLine(e);
                     }
                 }
             }

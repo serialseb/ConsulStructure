@@ -51,7 +51,7 @@ build:
   include_nuget_references: true
 
 after_build:
- - cd %APPVEYOR_BUILD_FOLDER% && nuget pack ConsulStructure.nuspec -version %APPVEYOR_BUILD_VERSION% -basepath %APPVEYOR_BUILD_FOLDER%\src\ConsulStructure
+ - cd %APPVEYOR_BUILD_FOLDER% && nuget pack ConsulStructure.nuspec -version %APPVEYOR_BUILD_VERSION% 
 
 environment:
   SSL_CERT_FILE: C:\ca\cacert.pem
