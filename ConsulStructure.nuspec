@@ -21,7 +21,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="src/ConsulStructure/**/*.cs" exclude="src/ConsulStructure/bin/**/*.*;src/ConsulStructure/obj/**/*.*;src/ConsulStructure/Properties/**/*.*;src/ConsulStructure/Tests/**/*" target="contentFiles\cs\any" />
-    <file src="src/ConsulStructure/**/*.cs" exclude="src/ConsulStructure/bin/**/*.*;src/ConsulStructure/obj/**/*.*;src/ConsulStructure/Properties/**/*.*;src/ConsulStructure/Tests/**/*" target="content\App_Packages\ConsulStructure.$version$" />
+    <file src="src/ConsulStructure/**/*.cs" exclude="src/ConsulStructure/bin/**/*.*;src/ConsulStructure/obj/**/*.*;src/ConsulStructure/Properties/**/*.*;src/ConsulStructure/Tests/**/*" target="contentFiles/cs/any" />
+    <file src="src/ConsulStructure/**/*.cs" exclude="src/ConsulStructure/bin/**/*.*;src/ConsulStructure/obj/**/*.*;src/ConsulStructure/Properties/**/*.*;src/ConsulStructure/Tests/**/*" target="content/App_Packages/ConsulStructure.$version$" />
   </files>
 </package>
