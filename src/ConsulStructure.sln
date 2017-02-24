@@ -10,6 +10,8 @@ ProjectSection(SolutionItems) = preProject
 	..\README.md = ..\README.md
 	..\LICENSE.md = ..\LICENSE.md
 	..\ConsulStructure.nuspec = ..\ConsulStructure.nuspec
+	..\appveyor.yml = ..\appveyor.yml
+	..\VERSION = ..\VERSION
 EndProjectSection
 EndProject
 Global
