@@ -39,7 +39,7 @@ Currently, Structure supports nesting, and a couple of base data types for keys,
 
 You can also use ConsulStructure to receive key changes without building objects.
 
-```
+```csharp
 public class ConsulListening
 {
     public void ListenToKeyValues(IEnumerable<KeyValuePair<string,byte[]>> keyValues)
