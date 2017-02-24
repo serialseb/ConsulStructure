@@ -3,9 +3,9 @@ using ConsulStructure.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
 
-namespace ConsulStructure.Tests
+namespace ConsulStructure.Tests.typed
 {
-    public class key_discovery : AbstractStructureTest
+    public class discovering_keys : AbstractStructureTest
     {
         [Fact]
         public void property_discovered()

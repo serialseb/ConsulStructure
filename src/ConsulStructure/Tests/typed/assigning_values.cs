@@ -3,7 +3,7 @@ using ConsulStructure.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
 
-namespace ConsulStructure.Tests
+namespace ConsulStructure.Tests.typed
 {
     public class assigning_values : AbstractStructureTest
     {

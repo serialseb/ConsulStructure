@@ -5,21 +5,21 @@ using ConsulStructure.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
 
-namespace ConsulStructure.Tests
+namespace ConsulStructure.Tests.http
 {
-    public class successful_http_operation : AbstractHttpMemoryTest
+    public class successful : AbstractHttpMemoryTest
     {
         [Fact]
         public async Task can_shut_down()
         {
-
+            await Structure.Start(new SimpleProperties(), TestOptions()).Stop();
         }
 
         [Fact]
         public async Task key_is_assigned_repeatedly()
         {
             var config = new SimpleProperties();
-            var updater = Structure.Start(config, TestOptions<SimpleProperties>());
+            var updater = Structure.Start(config, TestOptions());
 
             ConsulSimulator.PutKey("/keystring", "first");
             await KeyAssigned.WaitOne();
@@ -38,7 +38,7 @@ namespace ConsulStructure.Tests
         public async Task mutliple_key_changes_get_correct_value()
         {
             var config = new SimpleProperties();
-            var updater = Structure.Start(config, TestOptions<SimpleProperties>());
+            var updater = Structure.Start(config, TestOptions());
 
             ConsulSimulator.PutKey("/keystring", "first");
             ConsulSimulator.PutKey("/keystring", "second");
@@ -53,7 +53,7 @@ namespace ConsulStructure.Tests
         public async Task key_is_assigned_once()
         {
             var config = new SimpleProperties();
-            var updater = Structure.Start(config, TestOptions<SimpleProperties>());
+            var updater = Structure.Start(config, TestOptions());
 
             ConsulSimulator.PutKey("/keystring", "http");
             await KeyAssigned.WaitOne();

@@ -22,7 +22,7 @@ namespace ConsulStructure.Tests.Infrastructure
         protected readonly AutoResetAwaitable KeyAssigned = new AutoResetAwaitable();
         protected readonly ConsulSimulator ConsulSimulator = new ConsulSimulator();
 
-        internal Structure.Options TestOptions<T>(Func<AppFunc, AppFunc> response = null)
+        internal Structure.Options TestOptions(Func<AppFunc, AppFunc> response = null)
         {
             return new Structure.Options
             {
