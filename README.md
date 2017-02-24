@@ -66,10 +66,12 @@ json using the excellent SimpleJson library.
 ## Things to do
 
  - [x] Test HTTP part of the library
- - [ ] Create AppVeyor / Travis build
+ - [x] Create AppVeyor / Travis build
  - [x] Create nuget package
+ - [ ] Publish to nuget
  - [ ] Add all base datatype converters
  - [ ] Add converters for go's way of writing data (dates and timespans come to mind)
+ - [ ] Exponential back off strategy
 
 ## Credits
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace ConsulStructure
@@ -13,17 +12,21 @@ namespace ConsulStructure
         static class Http
         {
             internal static async Task<int> WaitForChanges(
-                HttpClient client,
+                Func<HttpRequestMessage,Task<HttpResponseMessage>> sender,
                 string prefix,
                 Action<IEnumerable<KeyValuePair<string, byte[]>>> result,
-                CancellationToken cancel,
                 TimeSpan timeout,
                 int existingIndex,
                 Func<string, IEnumerable<KeyValuePair<string, byte[]>>> parser)
             {
-                var response = await client.GetAsync(
-                    CreateKvPrefixUri(prefix, timeout, existingIndex),
-                    cancel);
+                var request = new HttpRequestMessage()
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = CreateKvPrefixUri(prefix, timeout, existingIndex),
+
+                };
+                var response = await sender(request);
+
                 var indexResponseHeader = response.Headers.GetValues("X-Consul-Index").LastOrDefault();
 
                 int newIndex;
