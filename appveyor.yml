@@ -37,7 +37,7 @@ platform: Any CPU
 
 
 before_build:
-  - cd src && nuget restore
+  - pushd && cd src && nuget restore && popd
 
 nuget:
   project_feed: true
