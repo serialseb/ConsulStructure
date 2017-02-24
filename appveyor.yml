@@ -37,7 +37,7 @@ platform: Any CPU
 
 
 before_build:
-  - nuget restore
+  - pushd && cd src && nuget restore && popd
 
 nuget:
   project_feed: true
@@ -51,7 +51,8 @@ build:
   include_nuget_references: true
 
 after_build:
- - nuget pack .\ConsulStructure.nuspec -version {version}
+ - cd %APPVEYOR_BUILD_FOLDER% && nuget pack ConsulStructure.nuspec -version %APPVEYOR_BUILD_VERSION% -basepath %APPVEYOR_BUILD_FOLDER%/src/ConsulStructure/
+
 environment:
   SSL_CERT_FILE: C:\ca\cacert.pem
   github_username: serialseb
