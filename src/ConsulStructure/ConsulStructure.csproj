@@ -84,8 +84,14 @@
     <Compile Include="Tests\Examples\NestedProperties.cs" />
     <Compile Include="Tests\Examples\SimpleProperties.cs" />
     <Compile Include="Tests\Examples\Tests.cs" />
+    <Compile Include="Tests\Infrastructure\AbstractHttpMemoryTest.cs" />
     <Compile Include="Tests\Infrastructure\AbstractStructureTest.cs" />
+    <Compile Include="Tests\Infrastructure\AutoResetAwaitable.cs" />
+    <Compile Include="Tests\Infrastructure\ConsulSimulator.cs" />
+    <Compile Include="Tests\Infrastructure\Http.cs" />
+    <Compile Include="Tests\Infrastructure\OwinExtensions.cs" />
     <Compile Include="Tests\key_discovery.cs" />
+    <Compile Include="Tests\successful_http_operation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

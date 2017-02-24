@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace ConsulStructure
 
                 int newIndex;
                 if (indexResponseHeader == null
-                    || !int.TryParse(indexResponseHeader, out newIndex)
+                    || !Int32.TryParse(indexResponseHeader, out newIndex)
                     || newIndex <= existingIndex)
                     return existingIndex;
 
@@ -48,6 +49,7 @@ namespace ConsulStructure
             {
                 return prefix.StartsWith("/") ? prefix.Substring(1) : prefix;
             }
+
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using ConsulStructure.Tests.Infrastructure;
+using Shouldly;
 using Xunit;
 
 namespace ConsulStructure.Tests.Examples

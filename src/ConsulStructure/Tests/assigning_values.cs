@@ -1,4 +1,5 @@
 ﻿using ConsulStructure.Tests.Examples;
+using ConsulStructure.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
 
@@ -10,7 +11,7 @@ namespace ConsulStructure.Tests
         public void unknown_key_is_ignored()
         {
             var demo = new SimpleProperties();
-            Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {KV("/unknown", "valuestring")} ]"));
+            Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {Http.KV("/unknown", "valuestring")} ]"));
             IgnoredKeys.ShouldContainKey("/unknown");
         }
 
@@ -18,7 +19,7 @@ namespace ConsulStructure.Tests
         public void known_string_key_assigned()
         {
             var demo = new SimpleProperties();
-            Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {KV("/keystring", "valuestring")} ]"));
+            Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {Http.KV("/keystring", "valuestring")} ]"));
             demo.KeyString.ShouldBe("valuestring");
         }
 
@@ -26,9 +27,9 @@ namespace ConsulStructure.Tests
         public void known_bool_key_assigned()
         {
             var demo = new SimpleProperties();
-            Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {KV("/keybool", "true")} ]"));
+            Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {Http.KV("/keybool", "true")} ]"));
             demo.KeyBool.ShouldBe(true);
-            Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {KV("/keybool", "false")} ]"));
+            Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {Http.KV("/keybool", "false")} ]"));
             demo.KeyBool.ShouldBe(false);
         }
 
@@ -36,9 +37,9 @@ namespace ConsulStructure.Tests
         public void known_int_key_assigned()
         {
             var demo = new SimpleProperties();
-            Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {KV("/keyint32", "1")} ]"));
+            Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {Http.KV("/keyint32", "1")} ]"));
             demo.KeyInt32.ShouldBe(1);
-            Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {KV("/keyint32", "0")} ]"));
+            Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {Http.KV("/keyint32", "0")} ]"));
             demo.KeyInt32.ShouldBe(0);
         }
     }

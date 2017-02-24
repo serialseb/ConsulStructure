@@ -1,4 +1,5 @@
 ﻿using ConsulStructure.Tests.Examples;
+using ConsulStructure.Tests.Infrastructure;
 using Shouldly;
 using Xunit;
 

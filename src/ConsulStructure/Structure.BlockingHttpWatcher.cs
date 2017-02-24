@@ -31,20 +31,28 @@ namespace ConsulStructure
                 var idx = 0;
                 while (_dispose.IsCancellationRequested == false)
                 {
-                    idx = await Http.WaitForChanges(
-                        _client,
-                        _options.Prefix,
-                        _configurationReceived,
-                        _dispose.Token,
-                        _options.Timeout,
-                        idx,
-                        _options.Converters.KeyParser);
+                    try
+                    {
+                        idx = await Http.WaitForChanges(
+                            _client,
+                            _options.Prefix,
+                            _configurationReceived,
+                            _dispose.Token,
+                            _options.Timeout,
+                            idx,
+                            _options.Converters.KeyParser);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 }
             }
 
             public async Task Stop()
             {
-                _dispose.Cancel();
+                if (_dispose.IsCancellationRequested == false)
+                    _dispose.Cancel();
                 await _loop;
                 _client.Dispose();
             }
