@@ -51,7 +51,8 @@ build:
   include_nuget_references: true
 
 after_build:
- - nuget pack .\ConsulStructure.nuspec -version %APPVEYOR_BUILD_VERSION%
+ - nuget pack %APPVEYOR_BUILD_FOLDER%\ConsulStructure.nuspec -version %APPVEYOR_BUILD_VERSION% -outputdirectory %APPVEYOR_BUILD_FOLDER%
+
 environment:
   SSL_CERT_FILE: C:\ca\cacert.pem
   github_username: serialseb
