@@ -12,6 +12,7 @@ ProjectSection(SolutionItems) = preProject
 	..\ConsulStructure.nuspec = ..\ConsulStructure.nuspec
 	..\appveyor.yml = ..\appveyor.yml
 	..\VERSION = ..\VERSION
+	..\CHANGELOG.md = ..\CHANGELOG.md
 EndProjectSection
 EndProject
 Global
