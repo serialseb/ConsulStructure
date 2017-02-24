@@ -15,10 +15,13 @@ namespace ConsulStructure.Tests.untyped
         {
             string receivedKey = null;
             byte[] receivedValue = null;
-            Action<KeyValuePair<string, byte[]>> keyReceiver = (kv) =>
+            Action<IEnumerable<KeyValuePair<string, byte[]>>> keyReceiver = (kvs) =>
             {
-                receivedKey = kv.Key;
-                receivedValue = kv.Value;
+                foreach (var kv in kvs)
+                {
+                    receivedKey = kv.Key;
+                    receivedValue = kv.Value;
+                }
             };
 
             var updater = Structure.Start(keyReceiver, TestOptions());

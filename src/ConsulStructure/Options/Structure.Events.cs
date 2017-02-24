@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace ConsulStructure
 {
@@ -8,13 +10,13 @@ namespace ConsulStructure
         {
             internal delegate void KeyDiscoveredDelegate(string keyPath, PropertyInfo property);
 
-            internal delegate void KeyValueIgnoredDelegate(string keyPath, byte[] value);
+            internal delegate void KeyValuesIgnoredDelegate(IEnumerable<KeyValuePair<string, byte[]>> keyValues);
 
-            internal delegate void KeyValueAssignedDelegate(string keyPath, object value);
+            internal delegate void KeyValuesAssignedDelegate(IEnumerable<KeyValuePair<string, object>> keyValues);
 
             internal KeyDiscoveredDelegate KeyDiscovered { get; set; } = (key, property) => { };
-            internal KeyValueIgnoredDelegate KeyValueIgnored { get; set; } = (path, value) => { };
-            internal KeyValueAssignedDelegate KeyValueAssigned { get; set; } = (path, value) => { };
+            internal KeyValuesIgnoredDelegate KeyValuesesIgnored { get; set; } = (keyValues) => { };
+            internal KeyValuesAssignedDelegate KeyValuesAssigned { get; set; } = (keyValues) => { };
         }
     }
 }

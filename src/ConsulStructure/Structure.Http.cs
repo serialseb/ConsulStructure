@@ -15,7 +15,7 @@ namespace ConsulStructure
             internal static async Task<int> WaitForChanges(
                 HttpClient client,
                 string prefix,
-                Action<KeyValuePair<string, byte[]>> result,
+                Action<IEnumerable<KeyValuePair<string, byte[]>>> result,
                 CancellationToken cancel,
                 TimeSpan timeout,
                 int existingIndex,
@@ -28,12 +28,11 @@ namespace ConsulStructure
 
                 int newIndex;
                 if (indexResponseHeader == null
-                    || !Int32.TryParse(indexResponseHeader, out newIndex)
+                    || !int.TryParse(indexResponseHeader, out newIndex)
                     || newIndex <= existingIndex)
                     return existingIndex;
 
-                foreach (var key in parser(await response.Content.ReadAsStringAsync()))
-                    result(key);
+                result(parser(await response.Content.ReadAsStringAsync()));
                 return newIndex;
             }
 
@@ -49,7 +48,6 @@ namespace ConsulStructure
             {
                 return prefix.StartsWith("/") ? prefix.Substring(1) : prefix;
             }
-
         }
     }
 }

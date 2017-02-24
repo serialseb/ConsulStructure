@@ -6,13 +6,14 @@ namespace ConsulStructure
 {
     internal partial class Structure
     {
-
-        internal static Structure Start(Action<KeyValuePair<string,byte[]>> instance, Options options = null)
+        internal static Structure Start(Action<IEnumerable<KeyValuePair<string, byte[]>>> instance,
+            Options options = null)
         {
             options = options ?? new Options();
 
             return new Structure(new LambdaStructureWatcher(instance, options).Dispose);
         }
+
         internal static Structure Start<T>(T instance, Options options = null)
         {
             options = options ?? new Options();

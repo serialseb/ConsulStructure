@@ -24,7 +24,7 @@ var configuration = my ProjectConfiguration {
     IsStructureAwesome = true // key: /subconfiguration/isstructureawesome
   }
 };
-var updater = Structure.New(configuration);
+var updater = Structure.Start(configuration);
 ```
 
 Your configuration class can have any level of nesting, it's up to you what it looks like.
@@ -34,6 +34,25 @@ Any change to consul is reflected immediately in your class.
 
 Currently, Structure supports nesting, and a couple of base data types for keys, `bool`, `string`,
 `int`. As consul only sees values as byte arrays, Converters are customisable to match your needs.
+
+## Using without configuration objects
+
+You can also use ConsulStructure to receive key changes without building objects.
+
+```
+public class ConsulListening
+{
+    public void ListenToKeyValues(IEnumerable<KeyValuePair<string,byte[]>> keyValues)
+    {
+        foreach(var kv in keyValues) Console.WriteLine($"Received key={kv.Key} with value {Encoding.UTF8.GetString(kv.Value)}");
+    }
+
+    public Task Main()
+    {
+        Structure.Start(ListenToKeyValues);
+    }
+}
+```
 
 ## How does it work
 

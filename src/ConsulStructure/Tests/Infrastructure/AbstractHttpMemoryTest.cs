@@ -33,8 +33,11 @@ namespace ConsulStructure.Tests.Infrastructure
                 Events =
                 {
                     KeyDiscovered = (keypath, property) => DiscoveredKeys[keypath] = property,
-                    KeyValueIgnored = (keypath, value) => IgnoredKeys[keypath] = value,
-                    KeyValueAssigned = (keypath, value) =>
+                    KeyValuesesIgnored = (kvs) =>
+                    {
+                        foreach (var kv in kvs) IgnoredKeys[kv.Key] = kv.Value;
+                    },
+                    KeyValuesAssigned = (kv) =>
                     {
                         KeyAssigned.Signal();
                     }

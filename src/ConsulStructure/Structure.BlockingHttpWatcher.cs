@@ -10,14 +10,14 @@ namespace ConsulStructure
     {
         class BlockingHttpWatcher
         {
-            readonly Action<KeyValuePair<string, byte[]>> _configurationReceived;
+            readonly Action<IEnumerable<KeyValuePair<string, byte[]>>> _configurationReceived;
             readonly Options _options;
             readonly HttpClient _client;
             readonly CancellationTokenSource _dispose = new CancellationTokenSource();
             readonly Task _loop;
 
             public BlockingHttpWatcher(
-                Action<KeyValuePair<string, byte[]>> configurationReceived,
+                Action<IEnumerable<KeyValuePair<string, byte[]>>> configurationReceived,
                 Options options)
             {
                 _configurationReceived = configurationReceived;

@@ -9,11 +9,11 @@ namespace ConsulStructure
     {
         class LambdaStructureWatcher
         {
-            readonly Action<KeyValuePair<string,byte[]>> _instance;
+            readonly Action<IEnumerable<KeyValuePair<string, byte[]>>> _instance;
             readonly Options _options;
             readonly Func<Task> _watcherDisposer;
 
-            public LambdaStructureWatcher(Action<KeyValuePair<string,byte[]>> instance, Options options)
+            public LambdaStructureWatcher(Action<IEnumerable<KeyValuePair<string, byte[]>>> instance, Options options)
             {
                 _instance = instance;
                 _options = options;
@@ -21,10 +21,10 @@ namespace ConsulStructure
                 _watcherDisposer = options.Factories.Watcher(ApplyConfiguration, options);
             }
 
-            void ApplyConfiguration(KeyValuePair<string, byte[]> kv)
+            void ApplyConfiguration(IEnumerable<KeyValuePair<string, byte[]>> keyValuePairs)
             {
-                _instance(kv);
-                _options.Events.KeyValueAssigned(kv.Key, kv.Value);
+                _instance(keyValuePairs);
+                _options.Events.KeyValuesAssigned(keyValuePairs.Select(kv=>new KeyValuePair<string,object>(kv.Key,kv.Value)));
             }
 
             public Task Dispose()

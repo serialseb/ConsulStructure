@@ -9,7 +9,7 @@ namespace ConsulStructure
     {
         internal class Factories
         {
-            public delegate Func<Task> WatcherDelegate(Action<KeyValuePair<string, byte[]>> onChanges, Options options);
+            public delegate Func<Task> WatcherDelegate(Action<IEnumerable<KeyValuePair<string, byte[]>>> onChanges, Options options);
 
             public WatcherDelegate Watcher { get; set; } = (onChanges, options) => new BlockingHttpWatcher(onChanges, options).Stop;
 

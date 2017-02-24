@@ -35,18 +35,26 @@ namespace ConsulStructure
 
             readonly Dictionary<string, Func<T, byte[], object>> _propertySetters;
 
-            void ApplyConfiguration(KeyValuePair<string, byte[]> kv)
+            void ApplyConfiguration(IEnumerable<KeyValuePair<string, byte[]>> keyValuePairs)
             {
                 Func<T, byte[], object> converter;
-                if (_propertySetters.TryGetValue(kv.Key, out converter))
+                Dictionary<string, object> assigned = new Dictionary<string, object>();
+                Dictionary<string, byte[]> ignored = new Dictionary<string, byte[]>();
+                foreach (var kv in keyValuePairs)
                 {
-                    var conversionResult = converter(_instance, kv.Value);
-                    _options.Events.KeyValueAssigned(kv.Key, conversionResult);
+                    if (_propertySetters.TryGetValue(kv.Key, out converter))
+                    {
+                        var conversionResult = converter(_instance, kv.Value);
+                        assigned[kv.Key] = conversionResult;
+                    }
+                    else
+                    {
+                        ignored[kv.Key] = kv.Value;
+                    }
                 }
-                else
-                {
-                    _options.Events.KeyValueIgnored(kv.Key, kv.Value);
-                }
+                _options.Events.KeyValuesesIgnored(ignored);
+
+                _options.Events.KeyValuesAssigned(assigned);
             }
 
             public Task Dispose()

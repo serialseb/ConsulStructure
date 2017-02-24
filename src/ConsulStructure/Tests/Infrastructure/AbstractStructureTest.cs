@@ -22,15 +22,17 @@ namespace ConsulStructure.Tests.Infrastructure
                 {
                     Watcher = (changes, options) =>
                     {
-                        foreach (var kv in options.Converters.KeyParser(json))
-                            changes(kv);
+                        changes(options.Converters.KeyParser(json));
                         return () => Task.CompletedTask;
                     }
                 },
                 Events =
                 {
                     KeyDiscovered = (keypath, property) => DiscoveredKeys[keypath] = property,
-                    KeyValueIgnored = (keypath, value) => IgnoredKeys[keypath] = value
+                    KeyValuesesIgnored = (kvs) =>
+                    {
+                        foreach (var kv in kvs) IgnoredKeys[kv.Key] = kv.Value;
+                    }
                 }
             };
         }
