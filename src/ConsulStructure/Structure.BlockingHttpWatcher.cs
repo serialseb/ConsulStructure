@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,19 +32,35 @@ namespace ConsulStructure
                 var idx = 0;
                 while (_dispose.IsCancellationRequested == false)
                 {
+                    HttpRequestMessage request = null;
+                    HttpResponseMessage response = null;
+                    var timings = TimeSpan.Zero;
                     try
                     {
                         idx = await Http.WaitForChanges(
-                            _client,
+                            async r =>
+                            {
+                                Stopwatch watch = new Stopwatch();
+                                request = r;
+                                watch.Start();
+                                response = await _client.SendAsync(request, _dispose.Token);
+                                watch.Stop();
+                                timings = watch.Elapsed;
+                                return response;
+                            },
                             _options.Prefix,
                             _configurationReceived,
-                            _dispose.Token,
                             _options.Timeout,
                             idx,
                             _options.Converters.KeyParser);
+                        _options.Events.HttpSuccess(request, response, timings);
                     }
-                    catch
+                    catch (OperationCanceledException)
                     {
+                    }
+                    catch (Exception e)
+                    {
+                        _options.Events.HttpError(e);
                     }
                 }
             }
