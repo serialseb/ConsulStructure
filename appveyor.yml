@@ -80,7 +80,8 @@ after_build:
         echo "Release notes: $releaseNotes"
         $nuspec.package.metadata.releaseNotes = $releaseNotes
       }
-      $nuspec.package.metadata.licenseUrl = "https://github.com/serialseb/ConsulStructure/tree/${$env:APPVEYOR_REPO_COMMIT}/LICENSE.md"
+      echo "Switching license to $env:APPVEYOR_REPO_COMMIT"
+      $nuspec.package.metadata.licenseUrl = "https://github.com/serialseb/ConsulStructure/tree/$env:APPVEYOR_REPO_COMMIT/LICENSE.md"
       $nuspec.Save($nuspecPath)
       echo "Saved NuSpec at $nuspecPath"
       nuget pack ConsulStructure.nuspec -version $env:APPVEYOR_BUILD_VERSION -basepath $env:APPVEYOR_BUILD_FOLDER/src/ConsulStructure/
