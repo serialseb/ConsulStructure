@@ -1,5 +1,5 @@
 [![Coverage Status](https://coveralls.io/repos/github/serialseb/ConsulStructure/badge.svg?branch=master)](https://coveralls.io/github/serialseb/ConsulStructure?branch=master)
-[![Build Status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)]([![Build status](https://ci.appveyor.com/api/projects/status/mp5v36y4lg76ppju?svg=true)](https://ci.appveyor.com/project/OpenRasta/consulstructure))
+[![Build Status](https://ci.appveyor.com/api/projects/status/mp5v36y4lg76ppju?svg=true)](https://ci.appveyor.com/project/OpenRasta/consulstructure))
 
 
 # ConsulStructure – Simple no-dependency configuration
