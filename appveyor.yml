@@ -60,8 +60,12 @@ after_build:
         $uri = "https://api.github.com/repos/serialseb/ConsulStructure/releases/tags/$($env:APPVEYOR_REPO_TAG_NAME)?access_token=$($env:GITHUB_TOKEN)"
         echo "Loading from $uri"
         $releaseNotes = (Invoke-WebRequest -Uri $uri | convertfrom-json).body.Replace('"','\"')
+
+        $nuspec = [xml](Get-Content ConsulStructure.nuspec)
+        $nuspec.package.metadata.releaseNotes = $releaseNotes
+        $nuspec.Save('ConsulStructure.nuspec')
       }
-      nuget pack ConsulStructure.nuspec -properties releaseNotes="$releaseNotes" -version %APPVEYOR_BUILD_VERSION% -basepath %APPVEYOR_BUILD_FOLDER%/src/ConsulStructure/
+      nuget pack ConsulStructure.nuspec -version %APPVEYOR_BUILD_VERSION% -basepath %APPVEYOR_BUILD_FOLDER%/src/ConsulStructure/
 
 environment:
   SSL_CERT_FILE: C:\ca\cacert.pem
