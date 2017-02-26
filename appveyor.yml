@@ -51,12 +51,12 @@ build_script:
   - ps: build\Build-Solution.ps1
 
 after_build:
-  - ps: $env:APPVEYOR_BUILD_FOLDER\build\Pubish-Coverity.ps1
-  - ps: $env:APPVEYOR_BUILD_FOLDER\build\Create-Package.ps1
+  - ps: build\Pubish-Coverity.ps1
+  - ps: build\Create-Package.ps1
 artifacts:
- - path: $env:APPVEYOR_BUILD_FOLDER\src\openrasta\bin\$(configuration)\*.dll
+ - path: src\openrasta\bin\$(configuration)\*.dll
    name: dlls
- - path: $env:APPVEYOR_BUILD_FOLDER\src\openrasta\bin\$(configuration)\*.pdb
+ - path: src\openrasta\bin\$(configuration)\*.pdb
    name: pdbs
  - path: '*.nupkg'
  - path: opencoverCoverage.xml
@@ -64,4 +64,4 @@ artifacts:
    name: Coverity Build
 
 test_script:
-- ps: $env:APPVEYOR_BUILD_FOLDER\build\Test-Code.ps1
+- ps: build\Test-Code.ps1
