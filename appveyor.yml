@@ -57,7 +57,7 @@ after_build:
   - ps: |
       $releaseNotes = 'Pre-release, see https://github.com/serialseb/ConsulStructure/blob/master/CHANGELOG.md for the latest details'
       if ($env:APPVEYOR_REPO_TAG) {
-        $releaseNotes = (Invoke-WebRequest -Uri "https://api.github.com/repos/OpenRasta/openrasta-core/releases/tags/$env:APPVEYOR_REPO_TAG_NAME?access_token=$env:GITHUB_TOKEN" | convertfrom-json).body.Replace('"','\"')
+        $releaseNotes = (Invoke-WebRequest -Uri "https://api.github.com/repos/OpenRasta/openrasta-core/releases/tags/$($env:APPVEYOR_REPO_TAG_NAME)?access_token=$($env:GITHUB_TOKEN)" | convertfrom-json).body.Replace('"','\"')
       }
       nuget pack ConsulStructure.nuspec -property releaseNotes="$releaseNotes" -version %APPVEYOR_BUILD_VERSION% -basepath %APPVEYOR_BUILD_FOLDER%/src/ConsulStructure/
 
