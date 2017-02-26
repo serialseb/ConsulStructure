@@ -8,3 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - ConsulStructure initial version
+
+## [0.0.1]
+### Added
+- Placeholder version

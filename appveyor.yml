@@ -3,29 +3,32 @@ install:
   - ps: mkdir c:\ca; iwr http://curl.haxx.se/ca/cacert.pem -outfile C:\ca\cacert.pem
   - set SSL_CERT_FILE=C:\ca\cacert.pem
   - ps: |
-        $version = [version]$(cat VERSION)
-        $build = $env:APPVEYOR_BUILD_NUMBER
-        $major = $version.Major
-        
-        $branch = $env:APPVEYOR_REPO_BRANCH
-        $releaseNotes = 'Pre-release, see github repository'
+      $version = [version]$(cat VERSION)
+      $build = $env:APPVEYOR_BUILD_NUMBER
+      $major = $version.Major
 
-        if ($branch -eq 'master') {
-          $version = "$version-ci-$build"
-        } elseif ($env:APPVEYOR_REPO_TAG) {
-          $version = $env:APPVEYOR_REPO_TAG_NAME
-          $releaseNotes = (Invoke-WebRequest -Uri "https://api.github.com/repos/OpenRasta/openrasta-core/releases/tags/$env:APPVEYOR_REPO_TAG_NAME?access_token=$env:GITHUB_TOKEN" | convertfrom-json).body.Replace('"','\"')
-        }
-        else {
-          $version = "$version-br-$branch-$build"
-        }
-        Set-AppveyorBuildVariable -Name "AssemblyMajor" -Value "$major"
-        Update-AppVeyorBuild -Version "$version"
+      $branch = $env:APPVEYOR_REPO_BRANCH
+      $releaseNotes = 'Pre-release, see github repository'
+
+      if ($branch -eq 'master') {
+        $version = "$version-ci-$build"
+      } elseif ($env:APPVEYOR_REPO_TAG) {
+        $version = $env:APPVEYOR_REPO_TAG_NAME
+      }
+      else {
+        $version = "$version-br-$branch-$build"
+      }
+      Set-AppveyorBuildVariable -Name "AssemblyMajor" -Value "$major"
+      Update-AppVeyorBuild -Version "$version"
 
   - gem install chandler --no-ri --no-rdoc
   - ps: set-content ~/.netrc "machine api.github.com login $env:github_username password $env:github_password" -encoding ascii
   - ps: cp ~/.netrc ~/_netrc
   - chandler push
+  - ps: |
+      if ($env:APPVEYOR_REPO_TAG) {
+        $releaseNotes = (Invoke-WebRequest -Uri "https://api.github.com/repos/OpenRasta/openrasta-core/releases/tags/$env:APPVEYOR_REPO_TAG_NAME?access_token=$env:GITHUB_TOKEN" | convertfrom-json).body.Replace('"','\"')
+      }
 
 assembly_info:
   patch: false
@@ -37,7 +40,6 @@ assembly_info:
 configuration: Debug
 
 platform: Any CPU
-
 
 before_build:
   - pushd && cd src && nuget restore && popd
