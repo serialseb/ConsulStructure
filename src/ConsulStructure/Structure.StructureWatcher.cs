@@ -37,11 +37,11 @@ namespace ConsulStructure
 
             void ApplyConfiguration(IEnumerable<KeyValuePair<string, byte[]>> keyValuePairs)
             {
-                Func<T, byte[], object> converter;
-                Dictionary<string, object> assigned = new Dictionary<string, object>();
-                Dictionary<string, byte[]> ignored = new Dictionary<string, byte[]>();
+                var assigned = new Dictionary<string, object>();
+                var ignored = new Dictionary<string, byte[]>();
                 foreach (var kv in keyValuePairs)
                 {
+                    Func<T, byte[], object> converter;
                     if (_propertySetters.TryGetValue(kv.Key, out converter))
                     {
                         var conversionResult = converter(_instance, kv.Value);
@@ -53,7 +53,6 @@ namespace ConsulStructure
                     }
                 }
                 _options.Events.KeyValuesesIgnored(ignored);
-
                 _options.Events.KeyValuesAssigned(assigned);
             }
 

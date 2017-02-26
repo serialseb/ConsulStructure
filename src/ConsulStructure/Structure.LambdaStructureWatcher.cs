@@ -24,7 +24,9 @@ namespace ConsulStructure
             void ApplyConfiguration(IEnumerable<KeyValuePair<string, byte[]>> keyValuePairs)
             {
                 _instance(keyValuePairs);
-                _options.Events.KeyValuesAssigned(keyValuePairs.Select(kv=>new KeyValuePair<string,object>(kv.Key,kv.Value)));
+                _options.Events.KeyValuesAssigned(
+                    keyValuePairs.Select(kv=>new KeyValuePair<string,object>(kv.Key,kv.Value))
+                                 .ToList());
             }
 
             public Task Dispose()
