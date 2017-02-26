@@ -55,6 +55,8 @@ after_build:
 
 environment:
   SSL_CERT_FILE: C:\ca\cacert.pem
+  COVERALLS_REPO_TOKEN:
+    secure: sR+OO2wYopy1MdZX+asECm56PinUUuIHNQXcAfSmVlf6lw6y4I5jOiby5IqsuwyP
   github_username: serialseb
   github_password:
     secure:
@@ -65,3 +67,11 @@ artifacts:
  - path: src\openrasta\bin\$(configuration)\*.pdb
    name: pdbs
  - path: '*.nupkg'
+
+test_script:
+- ps: >-
+    $opencover = (Resolve-Path "src/packages/OpenCover.*/tools/OpenCover.Console.exe).ToString()
+    $coveralls = (Resolve-Path "src/packages/coveralls.net.*/tools/csmacnz.coveralls.exe").ToString()
+    & $opencoder -register:user -target:xunit.console.clr4.exe "-targetargs:""src\ConsulStructure\bin\$env:CONFIGURATION\*.dll"" /noshadow /appveyor" -filter:"+[*]*" -output:opencoverCoverage.xml
+
+    & $coveralls --opencover -i opencoverCoverage.xml --repoToken $env:COVERALLS_REPO_TOKEN --commitId $env:APPVEYOR_REPO_COMMIT --commitBranch $env:APPVEYOR_REPO_BRANCH --commitAuthor $env:APPVEYOR_REPO_COMMIT_AUTHOR --commitEmail $env:APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL --commitMessage $env:APPVEYOR_REPO_COMMIT_MESSAGE --jobId $env:APPVEYOR_JOB_ID
