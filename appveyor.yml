@@ -48,7 +48,7 @@ build:
 
 build_script:
   - ps: echo (get-location)
-  - ps: $env:APPVEYOR_BUILD_FOLDER\build\Build-Solution.ps1=
+  - ps: $env:APPVEYOR_BUILD_FOLDER\build\Build-Solution.ps1
 
 after_build:
   - ps: $env:APPVEYOR_BUILD_FOLDER\build\Pubish-Coverity.ps1
