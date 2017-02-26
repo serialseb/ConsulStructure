@@ -36,7 +36,7 @@ install:
   - ps: build/Set-Version.ps1
 
 before_build:
-  - pushd && cd src && nuget restore && popd
+  - nuget restore src\ConsulStructure.sln
 
 build:
   parallel: true
