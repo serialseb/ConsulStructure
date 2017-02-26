@@ -20,15 +20,16 @@ namespace ConsulStructure.Tests.Infrastructure
         }
 
         protected readonly AutoResetAwaitable KeyAssigned = new AutoResetAwaitable();
+        protected readonly AutoResetAwaitable HttpEvent = new AutoResetAwaitable();
         protected readonly ConsulSimulator ConsulSimulator = new ConsulSimulator();
 
-        internal Structure.Options TestOptions(Func<AppFunc, AppFunc> response = null)
+        internal Structure.Options TestOptions(Func<AppFunc, AppFunc> responseMiddleware = null)
         {
             return new Structure.Options
             {
                 Factories =
                 {
-                    HttpClient = options => HttpClientSimulator(options, ConsulSimulator, response)
+                    HttpClient = options => HttpClientSimulator(options, ConsulSimulator, responseMiddleware)
                 },
                 Events =
                 {
@@ -40,9 +41,27 @@ namespace ConsulStructure.Tests.Infrastructure
                     KeyValuesAssigned = (kv) =>
                     {
                         KeyAssigned.Signal();
+                    },
+                    HttpError = exception =>
+                    {
+                        LastException = exception;
+                        HttpEvent.Signal();
+                    },
+                    HttpSuccess = (request, response, duration) =>
+                    {
+                        LastRequest = request;
+                        LastResponse = response;
+                        LastDuration = duration;
+                        HttpEvent.Signal();
                     }
                 }
             };
         }
+
+        protected TimeSpan LastDuration { get; private set; }
+        protected HttpResponseMessage LastResponse { get; private set; }
+        protected HttpRequestMessage LastRequest { get; private set; }
+
+        protected Exception LastException { get; set; }
     }
 }

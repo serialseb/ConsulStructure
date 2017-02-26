@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using ConsulStructure.Tests.Examples;
 using ConsulStructure.Tests.Infrastructure;
@@ -59,6 +60,24 @@ namespace ConsulStructure.Tests.http
             await KeyAssigned.WaitOne();
 
             config.KeyString.ShouldBe("http");
+            await updater.Stop();
+        }
+
+        [Fact]
+        public async Task http_events_published()
+        {
+            var config = new SimpleProperties();
+            var updater = Structure.Start(config, TestOptions());
+
+            ConsulSimulator.PutKey("/keystring", "http");
+            await HttpEvent.WaitOne();
+
+            LastRequest.RequestUri.AbsolutePath.ShouldStartWith("/v1/kv/");
+
+            LastResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+            LastDuration.ShouldBeGreaterThan(TimeSpan.Zero);
+            
             await updater.Stop();
         }
     }

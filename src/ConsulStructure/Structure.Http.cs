@@ -11,20 +11,17 @@ namespace ConsulStructure
     {
         static class Http
         {
+            internal delegate Task<HttpResponseMessage> Invoker(HttpRequestMessage request);
+
             internal static async Task<int> WaitForChanges(
-                Func<HttpRequestMessage,Task<HttpResponseMessage>> sender,
+                Invoker sender,
                 string prefix,
                 Action<IEnumerable<KeyValuePair<string, byte[]>>> result,
                 TimeSpan timeout,
                 int existingIndex,
                 Func<string, IEnumerable<KeyValuePair<string, byte[]>>> parser)
             {
-                var request = new HttpRequestMessage()
-                {
-                    Method = HttpMethod.Get,
-                    RequestUri = CreateKvPrefixUri(prefix, timeout, existingIndex),
-
-                };
+                var request = new HttpRequestMessage(HttpMethod.Get, CreateKvPrefixUri(prefix, timeout, existingIndex));
                 var response = await sender(request);
 
                 var indexResponseHeader = response.Headers.GetValues("X-Consul-Index").LastOrDefault();
