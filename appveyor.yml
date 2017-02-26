@@ -8,7 +8,6 @@ install:
       $major = $version.Major
 
       $branch = $env:APPVEYOR_REPO_BRANCH
-      $releaseNotes = 'Pre-release, see github repository'
 
       if ($branch -eq 'master') {
         $version = "$version-ci-$build"
@@ -25,10 +24,6 @@ install:
   - ps: set-content ~/.netrc "machine api.github.com login $env:github_username password $env:github_password" -encoding ascii
   - ps: cp ~/.netrc ~/_netrc
   - chandler push
-  - ps: |
-      if ($env:APPVEYOR_REPO_TAG) {
-        $releaseNotes = (Invoke-WebRequest -Uri "https://api.github.com/repos/OpenRasta/openrasta-core/releases/tags/$env:APPVEYOR_REPO_TAG_NAME?access_token=$env:GITHUB_TOKEN" | convertfrom-json).body.Replace('"','\"')
-      }
 
 assembly_info:
   patch: false
@@ -59,7 +54,12 @@ build:
 after_build:
   - pushd
   - cd %APPVEYOR_BUILD_FOLDER%
-  - ps: nuget pack ConsulStructure.nuspec -property releaseNotes="$releaseNotes" -version %APPVEYOR_BUILD_VERSION% -basepath %APPVEYOR_BUILD_FOLDER%/src/ConsulStructure/
+  - ps: |
+      $releaseNotes = 'Pre-release, see https://github.com/serialseb/ConsulStructure/blob/master/CHANGELOG.md for the latest details'
+      if ($env:APPVEYOR_REPO_TAG) {
+        $releaseNotes = (Invoke-WebRequest -Uri "https://api.github.com/repos/OpenRasta/openrasta-core/releases/tags/$env:APPVEYOR_REPO_TAG_NAME?access_token=$env:GITHUB_TOKEN" | convertfrom-json).body.Replace('"','\"')
+      }
+      nuget pack ConsulStructure.nuspec -property releaseNotes="$releaseNotes" -version %APPVEYOR_BUILD_VERSION% -basepath %APPVEYOR_BUILD_FOLDER%/src/ConsulStructure/
 
 environment:
   SSL_CERT_FILE: C:\ca\cacert.pem
