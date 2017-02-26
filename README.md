@@ -1,7 +1,19 @@
+[![Coverage Status](https://coveralls.io/repos/github/serialseb/ConsulStructure/badge.svg?branch=master)](https://coveralls.io/github/serialseb/ConsulStructure?branch=master)
+[![Build Status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva?svg=true)
+
+
 # ConsulStructure – Simple no-dependency configuration
 
-Sometimes you just want very simple configuration that doesn't suck, without bringing
-in a whole set of packages for it, so you can hit go as quickly as possible.
+
+[Consul](https://consul.io) is, amongst other things, a distributed key/value store,
+so it can store any bit of data to a specified key, which is just a string.
+
+Little bits of string are pretty useful for configuration data. There are manny ways
+to get that data in your configuration. But sometimes you just want very simple
+configuration that doesn't suck, without bringing in a whole set of packages for it,
+so you can hit go as quickly as possible.
+
+This is ConsulStructure.
 
 ## Quickstart
 
