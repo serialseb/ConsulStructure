@@ -1,4 +1,4 @@
-param ($Solution)
+param ($Solution = "src/ConsulStructure.sln")
 
 $buildCmd = "C:\Program Files (x86)\MSBuild\14.0\bin\msbuild.exe"
 $buildArgs = @(

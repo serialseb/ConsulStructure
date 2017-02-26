@@ -47,7 +47,7 @@ build:
   project: src/ConsulStructure.sln
 
 build_script:
-  - ps: ./build/Build-Solution.ps1 -Solution "src/ConsulStructure.sln"
+  - ps: ./build/Build-Solution.ps1
 
 after_build:
   - pushd
