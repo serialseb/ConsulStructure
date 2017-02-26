@@ -82,7 +82,7 @@ build_script:
       return
     }
     "Building project with Coverity Scan..."
-    & cov-build --dir cov-int $buildCmd $buildArgs;
+    cov-build --dir cov-int $buildCmd $buildArgs;
 
 after_build:
   - pushd
@@ -90,9 +90,9 @@ after_build:
   - ps: |
       if ($env:APPVEYOR_REPO_TAG -eq $true) {
           nuget.exe install PublishCoverity -ExcludeVersion
-          & PublishCoverity\PublishCoverity.exe compress -o coverity.zip -i cov-int
+          .\PublishCoverity\PublishCoverity.exe compress -o coverity.zip -i cov-int
           $version = $env:APPVEYOR_BUILD_VERSION
-          & PublishCoverity\PublishCoverity.exe publish `
+          .\PublishCoverity\PublishCoverity.exe publish `
             -t "$env:coverity_token" `
             -r "$env:APPVEYOR_REPO_NAME" `
             -z coverity.zip `
