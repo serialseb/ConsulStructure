@@ -55,6 +55,20 @@ after_build:
   - pushd
   - cd %APPVEYOR_BUILD_FOLDER%
   - ps: |
+      if ($env:APPVEYOR_REPO_TAG -eq $true) {
+          cov-build.exe --dir cov-int make all
+          nuget.exe install PublishCoverity -ExcludeVersion
+          PublishCoverity\PublishCoverity.exe compress -o coverity.zip -i cov-int
+          $version = $env:APPVEYOR_BUILD_VERSION
+          PublishCoverity\PublishCoverity.exe publish `
+            -t "$env:coverity_token" `
+            -r "$env:APPVEYOR_REPO_NAME" `
+            -z coverity.zip `
+            -d "AppVeyor Tagged Build($env:APPVEYOR_BUILD_VERSION)." `
+            --codeVersion "$version"
+       }
+
+  - ps: |
       $releaseNotes = 'Pre-release, see https://github.com/serialseb/ConsulStructure/blob/master/CHANGELOG.md for the latest details'
       echo "Repo tag: $env:APPVEYOR_REPO_TAG"
       if ($env:APPVEYOR_REPO_TAG -eq $true) {
@@ -80,6 +94,8 @@ environment:
   github_password:
     secure:
       1lXaOJ0GvCAOd0O9DDvVqw2eb7TvP2jve12u3hD2g4J7RVW2c2jC5XuRFyEuduUA
+  coverity_token:
+    secure: xZnMqxFHZN9mENgS6gGTtlz7hadzkcHVgp5HRGML4XY=
 
 artifacts:
  - path: src\openrasta\bin\$(configuration)\*.dll
@@ -88,6 +104,8 @@ artifacts:
    name: pdbs
  - path: '*.nupkg'
  - path: opencoverCoverage.xml
+ - path: coverity.zip
+   name: Coverity Build
 
 test_script:
 - ps: |
