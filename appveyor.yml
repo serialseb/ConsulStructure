@@ -33,7 +33,7 @@ install:
   - set PATH=C:\Ruby23\bin;%PATH%
   - ps: mkdir c:\ca; iwr http://curl.haxx.se/ca/cacert.pem -outfile C:\ca\cacert.pem
   - set SSL_CERT_FILE=C:\ca\cacert.pem
-  - ps: $env:APPVEYOR_BUILD_FOLDER/build/Set-Version.ps1
+  - ps: build/Set-Version.ps1
 
 before_build:
   - pushd && cd src && nuget restore && popd
@@ -44,15 +44,15 @@ build:
   publish_nuget: true
   publish_nuget_symbols: true
   include_nuget_references: true
-  project: $env:APPVEYOR_BUILD_FOLDER/src/ConsulStructure.sln
+  project: $env:APPVEYOR_BUILD_FOLDER\src\ConsulStructure.sln
 
 build_script:
   - ps: echo (get-location)
-  - ps: $env:APPVEYOR_BUILD_FOLDER/build/Build-Solution.ps1=
+  - ps: $env:APPVEYOR_BUILD_FOLDER\build\Build-Solution.ps1=
 
 after_build:
-  - ps: $env:APPVEYOR_BUILD_FOLDER/build/Pubish-Coverity.ps1
-  - ps: $env:APPVEYOR_BUILD_FOLDER/build/Create-Package.ps1
+  - ps: $env:APPVEYOR_BUILD_FOLDER\build\Pubish-Coverity.ps1
+  - ps: $env:APPVEYOR_BUILD_FOLDER\build\Create-Package.ps1
 artifacts:
  - path: $env:APPVEYOR_BUILD_FOLDER\src\openrasta\bin\$(configuration)\*.dll
    name: dlls
@@ -64,4 +64,4 @@ artifacts:
    name: Coverity Build
 
 test_script:
-- ps: $env:APPVEYOR_BUILD_FOLDER/build/Test-Code.ps1
+- ps: $env:APPVEYOR_BUILD_FOLDER\build\Test-Code.ps1
