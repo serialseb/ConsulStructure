@@ -62,7 +62,7 @@ after_build:
         echo "Loading from $uri"
         $releaseNotes = (Invoke-WebRequest -Uri $uri | convertfrom-json).body.Replace('"','\"')
         echo "Release notes: $releaseNotes"
-        nuspecPath = "$(env:APPVEYOR_BUILD_FOLDER)\ConsulStructure.nuspec"
+        nuspecPath = "$($env:APPVEYOR_BUILD_FOLDER)\ConsulStructure.nuspec"
         $nuspec = [xml](Get-Content $nuspecPath)
         $nuspec.package.metadata.releaseNotes = $releaseNotes
         $nuspec.Save($nuspecPath)
