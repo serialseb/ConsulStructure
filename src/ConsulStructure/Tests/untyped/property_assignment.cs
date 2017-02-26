@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ConsulStructure.Tests.Infrastructure;
@@ -27,10 +28,13 @@ namespace ConsulStructure.Tests.untyped
             var updater = Structure.Start(keyReceiver, TestOptions());
 
             ConsulSimulator.PutKey("/key", "/value");
-            await KeyValuesAssigned.Dequeue();
+            var assignedKv = await KeyValuesAssigned.Dequeue();
 
+            receivedKey.ShouldBe(assignedKv.Single().Key);
             receivedKey.ShouldBe("/key");
             receivedValue.ShouldBe(Encoding.UTF8.GetBytes("/value"));
+            receivedKey.ShouldBe(assignedKv.Single().Value);
+
             await updater.Stop();
         }
     }
