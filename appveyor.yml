@@ -73,7 +73,7 @@ artifacts:
  - path: '*.nupkg'
 
 test_script:
-- ps: >-
+- ps: |
     $opencover = (Resolve-Path "src/packages/OpenCover.*/tools/OpenCover.Console.exe").ToString()
     $coveralls = (Resolve-Path "src/packages/coveralls.net.*/tools/csmacnz.coveralls.exe").ToString()
     & $opencoder -register:user -target:xunit.console.exe "-targetargs:""src\ConsulStructure\bin\$env:CONFIGURATION\ConsulStructure.dll"" /noshadow /appveyor" -filter:"+[*]*" -output:opencoverCoverage.xml
