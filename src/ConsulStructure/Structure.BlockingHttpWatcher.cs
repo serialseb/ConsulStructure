@@ -27,6 +27,33 @@ namespace ConsulStructure
                 _loop = Run();
             }
 
+            static Func<Http.Invoker,Http.Invoker> Timings(Action<TimeSpan> timings)
+            {
+                return next => async request =>
+                {
+                    var stopWatch = new Stopwatch();
+                    stopWatch.Start();
+                    var response = await next(request);
+                    stopWatch.Stop();
+                    timings(stopWatch.Elapsed);
+                    return response;
+                };
+            }
+
+            static Func<Http.Invoker, Http.Invoker> Capture(Action<HttpRequestMessage, HttpResponseMessage> capture)
+            {
+                return next => async request =>
+                {
+                    var response = await next(request);
+                    capture(request, response);
+                    return response;
+                };
+            }
+
+            static Http.Invoker Send(HttpClient client, CancellationToken cancellationToken)
+            {
+                return request => client.SendAsync(request, cancellationToken);
+            }
             async Task Run()
             {
                 var idx = 0;
@@ -35,19 +62,15 @@ namespace ConsulStructure
                     HttpRequestMessage request = null;
                     HttpResponseMessage response = null;
                     var timings = TimeSpan.Zero;
+
+                    var invoker =
+                        Capture((req, res) => {request = req; response = res;})
+                            (Timings(t => timings = t)
+                            (Send(_client, _dispose.Token)));
                     try
                     {
                         idx = await Http.WaitForChanges(
-                            async r =>
-                            {
-                                Stopwatch watch = new Stopwatch();
-                                request = r;
-                                watch.Start();
-                                response = await _client.SendAsync(request, _dispose.Token);
-                                watch.Stop();
-                                timings = watch.Elapsed;
-                                return response;
-                            },
+                            invoker,
                             _options.Prefix,
                             _configurationReceived,
                             _options.Timeout,
@@ -57,6 +80,7 @@ namespace ConsulStructure
                     }
                     catch (OperationCanceledException)
                     {
+                        Console.WriteLine("canceled");
                     }
                     catch (Exception e)
                     {
