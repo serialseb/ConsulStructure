@@ -13,6 +13,7 @@
     <description>No-frill no-dependency consul configuration</description>
     <copyright>Copyright 2017 Sebastien Lambla</copyright>
     <tags>Consul Configuration</tags>
+    <releaseNotes>$releaseNotes</releaseNotes>
     <contentFiles>
       <files include="contentFiles\cs\**\*.*" buildAction="compile" />
     </contentFiles>
