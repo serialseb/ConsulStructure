@@ -33,31 +33,10 @@ install:
   - set PATH=C:\Ruby23\bin;%PATH%
   - ps: mkdir c:\ca; iwr http://curl.haxx.se/ca/cacert.pem -outfile C:\ca\cacert.pem
   - set SSL_CERT_FILE=C:\ca\cacert.pem
-  - ps: |
-      $version = [version]$(cat VERSION)
-      $build = $env:APPVEYOR_BUILD_NUMBER
-      $major = $version.Major
-
-      $branch = $env:APPVEYOR_REPO_BRANCH
-
-      if ($branch -eq 'master') {
-        $version = "$version-ci-$build"
-      } elseif ($env:APPVEYOR_REPO_TAG) {
-        $version = $env:APPVEYOR_REPO_TAG_NAME
-      }
-      else {
-        $version = "$version-br-$branch-$build"
-      }
-      Set-AppveyorBuildVariable -Name "AssemblyMajor" -Value "$major"
-      Update-AppVeyorBuild -Version "$version"
-
-  - gem install chandler --no-ri --no-rdoc
-  - ps: set-content ~/.netrc "machine api.github.com login $env:github_username password $env:github_password" -encoding ascii
-  - ps: cp ~/.netrc ~/_netrc
-  - chandler push
+  - ps: build/Set-Version.ps1
 
 before_build:
-  - pushd && cd src && nuget restore && popd
+  - nuget restore src/ConsulStructure.sln
 
 build:
   parallel: true
@@ -68,55 +47,16 @@ build:
   project: src/ConsulStructure.sln
 
 build_script:
-  - ps: |
-    $buildCmd = "C:\Program Files (x86)\MSBuild\14.0\bin\msbuild.exe"
-    $buildArgs = @("src/ConsulStructure.sln", "/l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll", "/m", "/p:UseSharedCompilation=false", "/p:Configuration=$env:CONFIGURATION", "/p:Platform=$env:PLATFORM")
-    if ($env:APPVEYOR_REPO_TAG -eq $false) {
-      & $buildCmd $buildArgs
-      return
-    } else {
-      "Building project with Coverity Scan..."
-      cov-build --dir cov-int $buildCmd $buildArgs;
-    }
+  - ps: echo (get-location)
+  - ps: build/Build-Solution.ps1
 
 after_build:
-  - pushd
-  - cd %APPVEYOR_BUILD_FOLDER%
-  - ps: |
-      if ($env:APPVEYOR_REPO_TAG -eq $true) {
-          nuget.exe install PublishCoverity -ExcludeVersion
-          .\PublishCoverity\PublishCoverity.exe compress -o coverity.zip -i cov-int
-          $version = $env:APPVEYOR_BUILD_VERSION
-          .\PublishCoverity\PublishCoverity.exe publish `
-            -t "$env:coverity_token" `
-            -r "$env:APPVEYOR_REPO_NAME" `
-            -z coverity.zip `
-            -d "AppVeyor Tagged Build($env:APPVEYOR_BUILD_VERSION)." `
-            --codeVersion "$version"
-       }
-
-  - ps: |
-      $releaseNotes = 'Pre-release, see https://github.com/serialseb/ConsulStructure/blob/master/CHANGELOG.md for the latest details'
-      echo "Repo tag: $env:APPVEYOR_REPO_TAG"
-      $nuspecPath = "$($env:APPVEYOR_BUILD_FOLDER)\ConsulStructure.nuspec"
-      $nuspec = [xml](Get-Content $nuspecPath)
-      if ($env:APPVEYOR_REPO_TAG -eq $true) {
-        $uri = "https://api.github.com/repos/serialseb/ConsulStructure/releases/tags/$($env:APPVEYOR_REPO_TAG_NAME)?access_token=$($env:GITHUB_TOKEN)"
-        echo "Loading from $uri"
-        $releaseNotes = (Invoke-WebRequest -Uri $uri | convertfrom-json).body.Replace('"','\"')
-        echo "Release notes: $releaseNotes"
-        $nuspec.package.metadata.releaseNotes = $releaseNotes
-      }
-      echo "Switching license to $env:APPVEYOR_REPO_COMMIT"
-      $nuspec.package.metadata.licenseUrl = "https://github.com/serialseb/ConsulStructure/tree/$env:APPVEYOR_REPO_COMMIT/LICENSE.md"
-      $nuspec.Save($nuspecPath)
-      echo "Saved NuSpec at $nuspecPath"
-      nuget pack ConsulStructure.nuspec -version $env:APPVEYOR_BUILD_VERSION -basepath $env:APPVEYOR_BUILD_FOLDER/src/ConsulStructure/
-
+  - ps: build/Publish-Coverity.ps1
+  - ps: build/Create-Package.ps1
 artifacts:
- - path: src\openrasta\bin\$(configuration)\*.dll
+ - path: src/openrasta/bin/$(configuration)/*.dll
    name: dlls
- - path: src\openrasta\bin\$(configuration)\*.pdb
+ - path: src/openrasta/bin/$(configuration)/*.pdb
    name: pdbs
  - path: '*.nupkg'
  - path: opencoverCoverage.xml
@@ -124,9 +64,4 @@ artifacts:
    name: Coverity Build
 
 test_script:
-- ps: |
-    $xunit = (Resolve-Path "src/packages/xunit.runner.console.*/tools/xunit.console.exe").ToString()
-    $opencover = (Resolve-Path "src/packages/OpenCover.*/tools/OpenCover.Console.exe").ToString()
-    $coveralls = (Resolve-Path "src/packages/coveralls.net.*/tools/csmacnz.Coveralls.exe").ToString()
-    & $opencover -register:user -target:$xunit  -returntargetcode "-targetargs:""src\ConsulStructure\bin\$env:CONFIGURATION\ConsulStructure.dll"" -noshadow -appveyor" -filter:"+[*]* -[*]Json.*" -output:opencoverCoverage.xml  -searchdirs:"src\ConsulStructure\bin\$env:CONFIGURATION\"
-    & $coveralls --opencover -i opencoverCoverage.xml --repoToken $env:COVERALLS_REPO_TOKEN --commitId $env:APPVEYOR_REPO_COMMIT --commitBranch $env:APPVEYOR_REPO_BRANCH --commitAuthor $env:APPVEYOR_REPO_COMMIT_AUTHOR --commitEmail $env:APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL --commitMessage $env:APPVEYOR_REPO_COMMIT_MESSAGE --jobId $env:APPVEYOR_JOB_ID
+- ps: build/Test-Code.ps1
