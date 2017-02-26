@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,64 +28,112 @@ namespace ConsulStructure
                 _loop = Run();
             }
 
-            static Func<Http.Invoker,Http.Invoker> Timings(Action<TimeSpan> timings)
+            static Func<Http.Invoker, Http.Invoker> Capture(Action<HttpRequestMessage, HttpResponseMessage, TimeSpan> capture)
             {
                 return next => async request =>
                 {
                     var stopWatch = new Stopwatch();
+
                     stopWatch.Start();
                     var response = await next(request);
                     stopWatch.Stop();
-                    timings(stopWatch.Elapsed);
+
+                    capture(request, response, stopWatch.Elapsed);
                     return response;
                 };
             }
 
-            static Func<Http.Invoker, Http.Invoker> Capture(Action<HttpRequestMessage, HttpResponseMessage> capture)
+            static readonly double maxBackoff = TimeSpan.FromMinutes(10).TotalSeconds;
+            static readonly HttpResponseMessage NullMessage = new HttpResponseMessage();
+            static Func<Http.Invoker, Http.Invoker> ExponentialBackoff(CancellationToken disposer)
             {
                 return next => async request =>
                 {
-                    var response = await next(request);
-                    capture(request, response);
+                    var backoff = TimeSpan.FromSeconds(1);
+                    do
+                    {
+                        var response = await next(request);
+                        if (response != NullMessage)
+                            return response;
+
+                        await Task.Delay(backoff, disposer);
+                        backoff = TimeSpan.FromSeconds(Math.Min(maxBackoff, Math.Exp(backoff.TotalSeconds)));
+                    } while (disposer.IsCancellationRequested == false);
+
+                    return NullMessage;
+                };
+            }
+            static Func<Http.Invoker, Http.Invoker> CatchExceptions(
+                Action<Exception> error,
+                CancellationToken dispose)
+            {
+                return next => async env =>
+                {
+                    try
+                    {
+                        return await next(env);
+                    }
+                    catch (OperationCanceledException cancel) when (cancel.CancellationToken == dispose)
+                    {
+                        throw;
+                    }
+                    catch (Exception e)
+                    {
+                        error(e);
+                        return NullMessage;
+                    }
+                };
+            }
+
+            static Http.Invoker CheckResponseValid(Http.Invoker inner)
+            {
+                return async request =>
+                {
+                    var response = await inner(request);
+
+                    if (response.IsSuccessStatusCode == false)
+                        throw new InvalidOperationException("Response code was not 200");
+
+                    if (response.Headers.Contains("X-Consul-Index") == false ||
+                        response.Headers.GetValues("X-Consul-Index").Count() != 1)
+                        throw new InvalidOperationException("Missing X-Consul-Index header");
+
                     return response;
                 };
             }
 
-            static Http.Invoker Send(HttpClient client, CancellationToken cancellationToken)
+            static Http.Invoker Send(HttpMessageInvoker client, CancellationToken cancellationToken)
             {
                 return request => client.SendAsync(request, cancellationToken);
             }
+
+            Http.Invoker Invoker()
+            {
+                return
+                    ExponentialBackoff(_dispose.Token)
+                    (CatchExceptions(e=>_options.Events.HttpError(e), _dispose.Token)
+                    (Capture(_options.Events.HttpSuccess)
+                    (CheckResponseValid(Send(_client, _dispose.Token)))));
+            }
+
             async Task Run()
             {
                 var idx = 0;
                 while (_dispose.IsCancellationRequested == false)
                 {
-                    HttpRequestMessage request = null;
-                    HttpResponseMessage response = null;
-                    var timings = TimeSpan.Zero;
-
-                    var invoker =
-                        Capture((req, res) => {request = req; response = res;})
-                            (Timings(t => timings = t)
-                            (Send(_client, _dispose.Token)));
                     try
                     {
                         idx = await Http.WaitForChanges(
-                            invoker,
+                            Invoker(),
                             _options.Prefix,
                             _configurationReceived,
                             _options.Timeout,
                             idx,
                             _options.Converters.KeyParser);
-                        _options.Events.HttpSuccess(request, response, timings);
                     }
                     catch (OperationCanceledException)
                     {
-                        Console.WriteLine("canceled");
-                    }
-                    catch (Exception e)
-                    {
-                        _options.Events.HttpError(e);
+                        return;
                     }
                 }
             }
