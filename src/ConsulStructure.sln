@@ -10,9 +10,18 @@ ProjectSection(SolutionItems) = preProject
 	..\README.md = ..\README.md
 	..\LICENSE.md = ..\LICENSE.md
 	..\ConsulStructure.nuspec = ..\ConsulStructure.nuspec
-	..\appveyor.yml = ..\appveyor.yml
 	..\VERSION = ..\VERSION
 	..\CHANGELOG.md = ..\CHANGELOG.md
+EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{83CFC2EA-B3B7-45D4-946B-61DF2BD91289}"
+ProjectSection(SolutionItems) = preProject
+	..\appveyor.yml = ..\appveyor.yml
+	..\build\Publish-Coverity.ps1 = ..\build\Publish-Coverity.ps1
+	..\build\Build-Solution.ps1 = ..\build\Build-Solution.ps1
+	..\build\Create-Package.ps1 = ..\build\Create-Package.ps1
+	..\build\Test-Code.ps1 = ..\build\Test-Code.ps1
+	..\build\Set-Version.ps1 = ..\build\Set-Version.ps1
 EndProjectSection
 EndProject
 Global
