@@ -48,7 +48,7 @@ build:
 
 build_script:
   - ps: echo (get-location)
-  - ps: build/Build-Solution.ps1
+  - ps: ls build/Build-Solution.ps1
   - ps: build/Build-Solution.ps1
 
 after_build:
