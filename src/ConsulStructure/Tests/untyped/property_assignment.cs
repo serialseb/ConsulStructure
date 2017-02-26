@@ -33,7 +33,7 @@ namespace ConsulStructure.Tests.untyped
             receivedKey.ShouldBe(assignedKv.Single().Key);
             receivedKey.ShouldBe("/key");
             receivedValue.ShouldBe(Encoding.UTF8.GetBytes("/value"));
-            receivedKey.ShouldBe(assignedKv.Single().Value);
+            receivedValue.ShouldBe(assignedKv.Single().Value);
 
             await updater.Stop();
         }
