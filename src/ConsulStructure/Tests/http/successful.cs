@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -9,33 +10,6 @@ using Xunit;
 
 namespace ConsulStructure.Tests.http
 {
-    public class status_code_error : AbstractHttpMemoryTest
-    {
-        [Fact]
-        public async Task error500()
-        {
-            var listener = Structure.Start(new SimpleProperties(), TestOptions(next => env => env.Response(500)));
-            await HttpEvent.WaitOne();
-
-            LastException.ShouldNotBeNull();
-
-            LastException.ShouldBeOfType<InvalidOperationException>();
-
-            await listener.Stop();
-        }
-
-        [Fact]
-        public async Task noIndexHeader()
-        {
-            var listener = Structure.Start(new SimpleProperties(), TestOptions(next => env => env.Response(200)));
-
-            await HttpEvent.WaitOne();
-
-            LastException.ShouldBeOfType<InvalidOperationException>();
-
-            await listener.Stop();
-        }
-    }
     public class successful : AbstractHttpMemoryTest
     {
         [Fact]
@@ -51,13 +25,13 @@ namespace ConsulStructure.Tests.http
             var updater = Structure.Start(config, TestOptions());
 
             ConsulSimulator.PutKey("/keystring", "first");
-            await KeyAssigned.WaitOne();
+            await KeyValuesAssigned.Dequeue();
 
             config.KeyString.ShouldBe("first");
 
             await Task.WhenAll(
                 ConsulSimulator.PutKeyWithDelay("/keystring", "second", TimeSpan.FromSeconds(3)),
-                KeyAssigned.WaitOne());
+                KeyValuesAssigned.Dequeue());
 
             config.KeyString.ShouldBe("second");
             await updater.Stop();
@@ -67,12 +41,14 @@ namespace ConsulStructure.Tests.http
         public async Task mutliple_key_changes_get_correct_value()
         {
             var config = new SimpleProperties();
-            var updater = Structure.Start(config, TestOptions());
 
             ConsulSimulator.PutKey("/keystring", "first");
             ConsulSimulator.PutKey("/keystring", "second");
 
-            await KeyAssigned.WaitOne();
+            var updater = Structure.Start(config, TestOptions());
+
+            var lastResult = await KeyValuesAssigned.Dequeue();
+            lastResult.Last().Value.ShouldBe("second");
 
             config.KeyString.ShouldBe("second");
             await updater.Stop();
@@ -85,7 +61,7 @@ namespace ConsulStructure.Tests.http
             var updater = Structure.Start(config, TestOptions());
 
             ConsulSimulator.PutKey("/keystring", "http");
-            await KeyAssigned.WaitOne();
+            await KeyValuesAssigned.Dequeue();
 
             config.KeyString.ShouldBe("http");
             await updater.Stop();
@@ -98,13 +74,13 @@ namespace ConsulStructure.Tests.http
             var updater = Structure.Start(config, TestOptions());
 
             ConsulSimulator.PutKey("/keystring", "http");
-            await HttpEvent.WaitOne();
+            var result = await HttpSuccesses.Dequeue();
 
-            LastRequest.RequestUri.AbsolutePath.ShouldStartWith("/v1/kv/");
+            result.Item1.RequestUri.AbsolutePath.ShouldStartWith("/v1/kv/");
 
-            LastResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+            result.Item2.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-            LastDuration.ShouldBeGreaterThan(TimeSpan.Zero);
+            result.Item3.ShouldBeGreaterThan(TimeSpan.Zero);
 
             await updater.Stop();
         }

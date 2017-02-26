@@ -27,7 +27,7 @@ namespace ConsulStructure.Tests.untyped
             var updater = Structure.Start(keyReceiver, TestOptions());
 
             ConsulSimulator.PutKey("/key", "/value");
-            await KeyAssigned.WaitOne();
+            await KeyValuesAssigned.Dequeue();
 
             receivedKey.ShouldBe("/key");
             receivedValue.ShouldBe(Encoding.UTF8.GetBytes("/value"));
