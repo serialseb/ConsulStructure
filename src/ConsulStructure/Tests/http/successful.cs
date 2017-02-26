@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using ConsulStructure.Tests.Examples;
 using ConsulStructure.Tests.Infrastructure;
@@ -8,6 +9,33 @@ using Xunit;
 
 namespace ConsulStructure.Tests.http
 {
+    public class status_code_error : AbstractHttpMemoryTest
+    {
+        [Fact]
+        public async Task error500()
+        {
+            var listener = Structure.Start(new SimpleProperties(), TestOptions(next => env => env.Response(500)));
+            await HttpEvent.WaitOne();
+
+            LastException.ShouldNotBeNull();
+
+            LastException.ShouldBeOfType<InvalidOperationException>();
+
+            await listener.Stop();
+        }
+
+        [Fact]
+        public async Task noIndexHeader()
+        {
+            var listener = Structure.Start(new SimpleProperties(), TestOptions(next => env => env.Response(200)));
+
+            await HttpEvent.WaitOne();
+
+            LastException.ShouldBeOfType<InvalidOperationException>();
+
+            await listener.Stop();
+        }
+    }
     public class successful : AbstractHttpMemoryTest
     {
         [Fact]
@@ -77,7 +105,7 @@ namespace ConsulStructure.Tests.http
             LastResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
             LastDuration.ShouldBeGreaterThan(TimeSpan.Zero);
-            
+
             await updater.Stop();
         }
     }

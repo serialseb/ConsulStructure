@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.Owin;
 using Microsoft.Owin.Builder;
 using Microsoft.Owin.Testing;
@@ -10,13 +11,17 @@ namespace ConsulStructure.Tests.Infrastructure
 {
     public abstract class AbstractHttpMemoryTest : AbstractStructureTest
     {
-        static HttpClient HttpClientSimulator(Structure.Options options, ConsulSimulator simulator, Func<AppFunc, AppFunc> response)
+        static HttpClient HttpClientSimulator(Structure.Options options, ConsulSimulator simulator, Func<AppFunc, AppFunc> interceptor)
         {
+            Func<IOwinContext,Task> invoker = simulator.Invoke;
+            if (interceptor != null)
+                invoker = interceptor(invoker);
+
             var appFunc = new AppBuilder()
-                .Use((env, next) => simulator.Invoke(env));
-            if (response != null)
-                appFunc = appFunc.Use(response);
-            return new HttpClient(new OwinClientHandler(appFunc.Build())) {BaseAddress = options.ConsulUri};
+                .Use((env, next) => invoker(env))
+                .Build();
+
+            return new HttpClient(new OwinClientHandler(appFunc)) {BaseAddress = options.ConsulUri};
         }
 
         protected readonly AutoResetAwaitable KeyAssigned = new AutoResetAwaitable();
