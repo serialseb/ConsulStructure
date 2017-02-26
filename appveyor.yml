@@ -51,7 +51,10 @@ build:
   include_nuget_references: true
 
 after_build:
- - cd %APPVEYOR_BUILD_FOLDER% && nuget pack ConsulStructure.nuspec -version %APPVEYOR_BUILD_VERSION% -basepath %APPVEYOR_BUILD_FOLDER%/src/ConsulStructure/
+  - pushd
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - nuget pack ConsulStructure.nuspec -version %APPVEYOR_BUILD_VERSION% -basepath %APPVEYOR_BUILD_FOLDER%/src/ConsulStructure/
+  - popd
 
 environment:
   SSL_CERT_FILE: C:\ca\cacert.pem
@@ -61,6 +64,7 @@ environment:
   github_password:
     secure:
       1lXaOJ0GvCAOd0O9DDvVqw2eb7TvP2jve12u3hD2g4J7RVW2c2jC5XuRFyEuduUA
+
 artifacts:
  - path: src\openrasta\bin\$(configuration)\*.dll
    name: dlls
@@ -73,5 +77,4 @@ test_script:
     $opencover = (Resolve-Path "src/packages/OpenCover.*/tools/OpenCover.Console.exe).ToString()
     $coveralls = (Resolve-Path "src/packages/coveralls.net.*/tools/csmacnz.coveralls.exe").ToString()
     & $opencoder -register:user -target:xunit.console.exe "-targetargs:""src\ConsulStructure\bin\$env:CONFIGURATION\ConsulStructure.dll"" /noshadow /appveyor" -filter:"+[*]*" -output:opencoverCoverage.xml
-
     & $coveralls --opencover -i opencoverCoverage.xml --repoToken $env:COVERALLS_REPO_TOKEN --commitId $env:APPVEYOR_REPO_COMMIT --commitBranch $env:APPVEYOR_REPO_BRANCH --commitAuthor $env:APPVEYOR_REPO_COMMIT_AUTHOR --commitEmail $env:APPVEYOR_REPO_COMMIT_AUTHOR_EMAIL --commitMessage $env:APPVEYOR_REPO_COMMIT_MESSAGE --jobId $env:APPVEYOR_JOB_ID
