@@ -33,7 +33,7 @@ install:
   - set PATH=C:\Ruby23\bin;%PATH%
   - ps: mkdir c:\ca; iwr http://curl.haxx.se/ca/cacert.pem -outfile C:\ca\cacert.pem
   - set SSL_CERT_FILE=C:\ca\cacert.pem
-  - ps: build/Set-Version.ps1
+  - ps: ./build/Set-Version.ps1
 
 before_build:
   - pushd && cd src && nuget restore && popd
@@ -47,13 +47,13 @@ build:
   project: src/ConsulStructure.sln
 
 build_script:
-  - ps: build/Build-Solution.ps1 -Solution "src/ConsulStructure.sln"
+  - ps: ./build/Build-Solution.ps1 -Solution "src/ConsulStructure.sln"
 
 after_build:
   - pushd
   - cd %APPVEYOR_BUILD_FOLDER%
-  - ps: build/Pubish-Coverity.ps1
-  - ps: build/Create-Package.ps1
+  - ps: ./build/Pubish-Coverity.ps1
+  - ps: ./build/Create-Package.ps1
 artifacts:
  - path: src\openrasta\bin\$(configuration)\*.dll
    name: dlls
@@ -65,4 +65,4 @@ artifacts:
    name: Coverity Build
 
 test_script:
-- ps: build/Test-Code.ps1
+- ps: ./build/Test-Code.ps1
