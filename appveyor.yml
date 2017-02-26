@@ -1,3 +1,34 @@
+environment:
+  SSL_CERT_FILE: C:\ca\cacert.pem
+  COVERALLS_REPO_TOKEN:
+    secure: sR+OO2wYopy1MdZX+asECm56PinUUuIHNQXcAfSmVlf6lw6y4I5jOiby5IqsuwyP
+  GITHUB_TOKEN:
+    secure: LWCRPexJEGMkW0f8ku8Q45CPnQDCi4sgyi/cFdOHizI9ToLlDYozXxI21bD9cDU4
+  github_username: serialseb
+  github_password:
+    secure:
+      1lXaOJ0GvCAOd0O9DDvVqw2eb7TvP2jve12u3hD2g4J7RVW2c2jC5XuRFyEuduUA
+  coverity_token:
+    secure: xZnMqxFHZN9mENgS6gGTtlz7hadzkcHVgp5HRGML4XY=
+
+assembly_info:
+  patch: false
+  file: src\CommonInfo.cs
+  assembly_version: $(AssemblyMajor).0.0.0
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+
+nuget:
+  project_feed: true
+  disable_publish_on_pr: true
+
+configuration: Debug
+
+platform: Any CPU
+
+cache:
+  - packages -> **\packages.config
+
 install:
   - set PATH=C:\Ruby23\bin;%PATH%
   - ps: mkdir c:\ca; iwr http://curl.haxx.se/ca/cacert.pem -outfile C:\ca\cacert.pem
@@ -25,23 +56,8 @@ install:
   - ps: cp ~/.netrc ~/_netrc
   - chandler push
 
-assembly_info:
-  patch: false
-  file: src\CommonInfo.cs
-  assembly_version: $(AssemblyMajor).0.0.0
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}'
-
-configuration: Debug
-
-platform: Any CPU
-
 before_build:
   - pushd && cd src && nuget restore && popd
-
-nuget:
-  project_feed: true
-  disable_publish_on_pr: true
 
 build:
   parallel: true
@@ -51,12 +67,28 @@ build:
   include_nuget_references: true
   project: src/ConsulStructure.sln
 
+build_script:
+  - ps: |
+    $buildCmd = "C:\Program Files (x86)\MSBuild\14.0\bin\msbuild.exe"
+    $buildArgs = @(
+                  "src/ConsulStructure.sln"
+                  "/l:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll",
+                  "/m",
+                  "/p:UseSharedCompilation=false",
+                  "/p:Configuration=$env:CONFIGURATION",
+                  "/p:Platform=$env:PLATFORM")
+    if ($env:APPVEYOR_REPO_TAG -eq $false) {
+      & $buildCmd $buildArgs
+      return
+    }
+    "Building project with Coverity Scan..."
+    & cov-build --dir cov-int $buildCmd $buildArgs;
+
 after_build:
   - pushd
   - cd %APPVEYOR_BUILD_FOLDER%
   - ps: |
       if ($env:APPVEYOR_REPO_TAG -eq $true) {
-          cov-build.exe --dir cov-int make all
           nuget.exe install PublishCoverity -ExcludeVersion
           PublishCoverity\PublishCoverity.exe compress -o coverity.zip -i cov-int
           $version = $env:APPVEYOR_BUILD_VERSION
@@ -85,19 +117,6 @@ after_build:
       $nuspec.Save($nuspecPath)
       echo "Saved NuSpec at $nuspecPath"
       nuget pack ConsulStructure.nuspec -version $env:APPVEYOR_BUILD_VERSION -basepath $env:APPVEYOR_BUILD_FOLDER/src/ConsulStructure/
-
-environment:
-  SSL_CERT_FILE: C:\ca\cacert.pem
-  COVERALLS_REPO_TOKEN:
-    secure: sR+OO2wYopy1MdZX+asECm56PinUUuIHNQXcAfSmVlf6lw6y4I5jOiby5IqsuwyP
-  GITHUB_TOKEN:
-    secure: LWCRPexJEGMkW0f8ku8Q45CPnQDCi4sgyi/cFdOHizI9ToLlDYozXxI21bD9cDU4
-  github_username: serialseb
-  github_password:
-    secure:
-      1lXaOJ0GvCAOd0O9DDvVqw2eb7TvP2jve12u3hD2g4J7RVW2c2jC5XuRFyEuduUA
-  coverity_token:
-    secure: xZnMqxFHZN9mENgS6gGTtlz7hadzkcHVgp5HRGML4XY=
 
 artifacts:
  - path: src\openrasta\bin\$(configuration)\*.dll
