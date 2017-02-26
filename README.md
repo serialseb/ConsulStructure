@@ -1,5 +1,5 @@
 [![Coverage Status](https://coveralls.io/repos/github/serialseb/ConsulStructure/badge.svg?branch=master)](https://coveralls.io/github/serialseb/ConsulStructure?branch=master)
-[![Build Status](https://ci.appveyor.com/api/projects/status/mp5v36y4lg76ppju?svg=true)](https://ci.appveyor.com/project/OpenRasta/consulstructure))
+[![Build Status](https://ci.appveyor.com/api/projects/status/mp5v36y4lg76ppju?svg=true)](https://ci.appveyor.com/project/OpenRasta/consulstructure)
 
 
 # ConsulStructure – Simple no-dependency configuration
@@ -9,8 +9,8 @@
 so it can store any bit of data to a specified key, which is just a string.
 
 Little bits of string are pretty useful for configuration data. There are manny ways
-to get that data in your configuration. But sometimes you just want very simple
-configuration that doesn't suck, without bringing in a whole set of packages for it,
+to get that data in your configuration. But sometimes you just want **very simple
+configuration that doesn't suck**, without bringing in a whole set of packages for it,
 so you can hit go as quickly as possible.
 
 This is ConsulStructure.

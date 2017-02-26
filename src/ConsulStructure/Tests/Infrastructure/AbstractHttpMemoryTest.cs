@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Owin;
@@ -24,8 +25,14 @@ namespace ConsulStructure.Tests.Infrastructure
             return new HttpClient(new OwinClientHandler(appFunc)) {BaseAddress = options.ConsulUri};
         }
 
-        protected readonly AutoResetAwaitable KeyAssigned = new AutoResetAwaitable();
-        protected readonly AutoResetAwaitable HttpEvent = new AutoResetAwaitable();
+        protected readonly AwaitableQueue<IEnumerable<KeyValuePair<string, object>>> KeyValuesAssigned =
+            new AwaitableQueue<IEnumerable<KeyValuePair<string, object>>>();
+
+        protected readonly AwaitableQueue<Exception> HttpErrors = new AwaitableQueue<Exception>();
+
+        protected readonly AwaitableQueue<Tuple<HttpRequestMessage, HttpResponseMessage, TimeSpan>> HttpSuccesses =
+            new AwaitableQueue<Tuple<HttpRequestMessage, HttpResponseMessage, TimeSpan>>();
+
         protected readonly ConsulSimulator ConsulSimulator = new ConsulSimulator();
 
         internal Structure.Options TestOptions(Func<AppFunc, AppFunc> responseMiddleware = null)
@@ -43,30 +50,14 @@ namespace ConsulStructure.Tests.Infrastructure
                     {
                         foreach (var kv in kvs) IgnoredKeys[kv.Key] = kv.Value;
                     },
-                    KeyValuesAssigned = (kv) =>
-                    {
-                        KeyAssigned.Signal();
-                    },
-                    HttpError = exception =>
-                    {
-                        LastException = exception;
-                        HttpEvent.Signal();
-                    },
+                    KeyValuesAssigned = KeyValuesAssigned.Enqueue,
+                    HttpError = HttpErrors.Enqueue,
                     HttpSuccess = (request, response, duration) =>
                     {
-                        LastRequest = request;
-                        LastResponse = response;
-                        LastDuration = duration;
-                        HttpEvent.Signal();
+                        HttpSuccesses.Enqueue(Tuple.Create(request, response, duration));
                     }
                 }
             };
         }
-
-        protected TimeSpan LastDuration { get; private set; }
-        protected HttpResponseMessage LastResponse { get; private set; }
-        protected HttpRequestMessage LastRequest { get; private set; }
-
-        protected Exception LastException { get; set; }
     }
 }
