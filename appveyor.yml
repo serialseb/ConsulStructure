@@ -55,7 +55,6 @@ after_build:
   - pushd
   - cd %APPVEYOR_BUILD_FOLDER%
   - nuget pack ConsulStructure.nuspec -version %APPVEYOR_BUILD_VERSION% -basepath %APPVEYOR_BUILD_FOLDER%/src/ConsulStructure/
-  - popd
 
 environment:
   SSL_CERT_FILE: C:\ca\cacert.pem
