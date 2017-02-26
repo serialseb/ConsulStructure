@@ -57,7 +57,7 @@ after_build:
   - ps: |
       $releaseNotes = 'Pre-release, see https://github.com/serialseb/ConsulStructure/blob/master/CHANGELOG.md for the latest details'
       if ($env:APPVEYOR_REPO_TAG) {
-        $uri = "https://api.github.com/repos/OpenRasta/openrasta-core/releases/tags/$($env:APPVEYOR_REPO_TAG_NAME)?access_token=$($env:GITHUB_TOKEN)"
+        $uri = "https://api.github.com/repos/serialseb/ConsulStructure/releases/tags/$($env:APPVEYOR_REPO_TAG_NAME)?access_token=$($env:GITHUB_TOKEN)"
         echo "Loading from $uri"
         $releaseNotes = (Invoke-WebRequest -Uri $uri | convertfrom-json).body.Replace('"','\"')
       }
