@@ -36,7 +36,7 @@ install:
   - ps: build/Set-Version.ps1
 
 before_build:
-  - nuget restore src\ConsulStructure.sln
+  - nuget restore src/ConsulStructure.sln
 
 build:
   parallel: true
@@ -44,19 +44,19 @@ build:
   publish_nuget: true
   publish_nuget_symbols: true
   include_nuget_references: true
-  project: $env:APPVEYOR_BUILD_FOLDER\src\ConsulStructure.sln
+  project: src/ConsulStructure.sln
 
 build_script:
   - ps: echo (get-location)
-  - ps: build\Build-Solution.ps1
+  - ps: build/Build-Solution.ps1
 
 after_build:
-  - ps: build\Pubish-Coverity.ps1
-  - ps: build\Create-Package.ps1
+  - ps: build/Publish-Coverity.ps1
+  - ps: build/Create-Package.ps1
 artifacts:
- - path: src\openrasta\bin\$(configuration)\*.dll
+ - path: src/openrasta/bin/$(configuration)/*.dll
    name: dlls
- - path: src\openrasta\bin\$(configuration)\*.pdb
+ - path: src/openrasta/bin/$(configuration)/*.pdb
    name: pdbs
  - path: '*.nupkg'
  - path: opencoverCoverage.xml
@@ -64,4 +64,4 @@ artifacts:
    name: Coverity Build
 
 test_script:
-- ps: build\Test-Code.ps1
+- ps: build/Test-Code.ps1
