@@ -1,5 +1,5 @@
 [![Coverage Status](https://coveralls.io/repos/github/serialseb/ConsulStructure/badge.svg?branch=master)](https://coveralls.io/github/serialseb/ConsulStructure?branch=master)
-[![Coverity Scan](https://img.shields.io/coverity/scan/11894.svg)]()
+[![Coverity Scan](https://img.shields.io/coverity/scan/11894.svg)](https://scan.coverity.com/projects/serialseb-consulstructure)
 [![Build Status](https://ci.appveyor.com/api/projects/status/mp5v36y4lg76ppju?svg=true)](https://ci.appveyor.com/project/OpenRasta/consulstructure)
 [![GitHub release](https://img.shields.io/github/release/serialseb/ConsulStructure.svg)](https://github.com/serialseb/ConsulStructure/releases/latest)
 [![NuGet](https://img.shields.io/nuget/v/ConsulStructure.svg)](https://www.nuget.org/packages/ConsulStructure/)
