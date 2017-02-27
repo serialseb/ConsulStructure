@@ -29,7 +29,7 @@ configuration: Debug
 platform: Any CPU
 
 cache:
-  - packages -> **\packages.config
+  - src\packages -> **\packages.config
 
 install:
   - set PATH=C:\Ruby23\bin;%PATH%
