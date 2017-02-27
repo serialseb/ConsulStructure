@@ -10,10 +10,11 @@
     <licenseUrl>https://github.com/serialseb/ConsulStructure/tree/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/serialseb/ConsulStructure/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>No-frill no-dependency consul configuration</description>
+    <description>No-frill no-dependency Consul Configuration.</description>
     <copyright>Copyright 2017 Sebastien Lambla</copyright>
     <tags>Consul Configuration</tags>
     <releaseNotes>$releaseNotes</releaseNotes>
+    <developmentDependency>true</developmentDependency>
     <contentFiles>
       <files include="contentFiles\cs\**\*.*" buildAction="compile" />
     </contentFiles>

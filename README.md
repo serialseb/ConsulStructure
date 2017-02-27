@@ -23,10 +23,18 @@ This is ConsulStructure.
 ConsulStructure ships as a source-code package, so you don't add more pressure to your
 dependency graph.
 
-You will be able to add the code through nuget, when I publish it.
+To get started, you can use nuget to install ConsulStructure.
 
-```csharp
+Using the package manager console:
+
+```powerhsell
 Install-Package ConsulStructure
+```
+
+Using the command line client:
+
+```cmd
+nuget install ConsulStructure
 ```
 
 To start receiving updates from Consul into your settings, it's one line, no dependencies,
