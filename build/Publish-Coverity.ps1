@@ -1,6 +1,6 @@
 if ($env:APPVEYOR_REPO_TAG -eq $true) {
-  nuget.exe install PublishCoverity -ExcludeVersion
-  PublishCoverity\PublishCoverity.exe compress -o coverity.zip -i cov-int
+  $coverityPublisher = (Resolve-Path "src/packages/PublishCoverity*/tools/PublishCoverity.exe").ToString()
+  & $coverityPublisher compress -o coverity.zip -i cov-int
   $version = $env:APPVEYOR_BUILD_VERSION
   .\PublishCoverity\PublishCoverity.exe publish `
     -t "$env:coverity_token" `
