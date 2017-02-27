@@ -55,6 +55,7 @@ build_script:
 after_build:
   - ps: build/Publish-Coverity.ps1
   - ps: build/Create-Package.ps1
+
 artifacts:
  - path: src/openrasta/bin/$(configuration)/*.dll
    name: dlls
@@ -67,3 +68,21 @@ artifacts:
 
 test_script:
 - ps: build/Test-Code.ps1
+
+deploy:
+ - provider: GitHub
+   artifact: /.*\.nupkg/
+   draft: false
+   prerelease: false
+   on:
+     branch: master
+     appveyor_repo_tag: true
+
+ - provider: NuGet
+   api_key:
+     secure: KAawIkFXgAsCh3eqjDd2N/epoJ8fW12RMSZpEaaqPZvlwlEEGdxanyxCFXccnvMa
+   skip_symbols: true
+   artifact: /.*\.nupkg/
+   on:
+     branch: master
+     appveyor_repo_tag: true
