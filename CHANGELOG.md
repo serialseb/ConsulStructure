@@ -5,9 +5,9 @@ here's a changelog for ConsulStrucutre!
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [0.0.2]
 ### Added
-- ConsulStructure initial version
+- ConsulStructure initial version, see the documentation on GitHub!
 
 ## [0.0.1]
 ### Added

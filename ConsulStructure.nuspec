@@ -4,8 +4,8 @@
     <id>ConsulStructure</id>
     <version>$version$</version>
     <title>ConsulStructure</title>
-    <authors>Sebastien Lambla</authors>
-    <owners>Sebastien Lambla</owners>
+    <authors>serialseb</authors>
+    <owners>serialseb</owners>
     <developmentDependency>true</developmentDependency>
     <licenseUrl>https://github.com/serialseb/ConsulStructure/tree/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/serialseb/ConsulStructure/</projectUrl>
@@ -19,7 +19,7 @@
       <files include="contentFiles\cs\**\*.*" buildAction="compile" />
     </contentFiles>
     <dependencies>
-      <dependency id="System.Net.Http" version="4.0.0" />
+      <dependency id="System.Net.Http" version="[4,5)" />
     </dependencies>
   </metadata>
   <files>
