@@ -4,7 +4,7 @@ if ($env:APPVEYOR_REPO_TAG -eq $true) {
   $version = $env:APPVEYOR_BUILD_VERSION
   & $coverityPublisher publish `
     -t "$env:coverity_token" `
-    -e
+    -e "$env:coverity_email"
     -r "$env:APPVEYOR_REPO_NAME" `
     -z coverity.zip `
     -d "AppVeyor Tagged Build($env:APPVEYOR_BUILD_VERSION)." `
