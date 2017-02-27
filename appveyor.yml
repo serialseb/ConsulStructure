@@ -72,6 +72,8 @@ test_script:
 deploy:
  - provider: GitHub
    artifact: /.*\.nupkg/
+   auth_token:
+    secure: LWCRPexJEGMkW0f8ku8Q45CPnQDCi4sgyi/cFdOHizI9ToLlDYozXxI21bD9cDU4
    draft: false
    prerelease: false
    on:
