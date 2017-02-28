@@ -22,4 +22,7 @@ if ($env:APPVEYOR_REPO_TAG){
 Set-AppveyorBuildVariable -Name "AssemblyMajor" -Value "$major"
 Update-AppVeyorBuild -Version "$version"
 
+ls bin
+ls bin/chandler
+
 bin/chandler push
