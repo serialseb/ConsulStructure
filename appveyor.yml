@@ -30,7 +30,7 @@ platform: Any CPU
 
 cache:
   - src\packages -> **\packages.config
-  - vendor/bundle --> Gemfile.lock
+  - vendor\ -> Gemfile.lock
 
 build:
   parallel: true
@@ -51,12 +51,6 @@ build_script:
 
 after_build:
   - ps: ./build/After-Build.ps1
-
-artifacts:
- - path: src/ConsulStructure/bin/$(configuration)/*.dll
-   name: dlls
- - path: src/ConsulStructure/bin/$(configuration)/*.pdb
-   name: pdbs
 
 test_script:
 - ps: ./build/Test-Script.ps1
