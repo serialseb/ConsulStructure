@@ -1,13 +1,11 @@
 environment:
+  SONARQUBE_TOKEN:
+    secure: qauV20TWEH6YwWi1g4DxNFlyqCxsvHnXy3evlLVr3FqNRsW6jnQ92eAE657OpKlv
   SSL_CERT_FILE: C:\ca\cacert.pem
   COVERALLS_REPO_TOKEN:
     secure: sR+OO2wYopy1MdZX+asECm56PinUUuIHNQXcAfSmVlf6lw6y4I5jOiby5IqsuwyP
   GITHUB_TOKEN:
     secure: LWCRPexJEGMkW0f8ku8Q45CPnQDCi4sgyi/cFdOHizI9ToLlDYozXxI21bD9cDU4
-  # github_username: serialseb
-  # github_password:
-  #   secure:
-  #     1lXaOJ0GvCAOd0O9DDvVqw2eb7TvP2jve12u3hD2g4J7RVW2c2jC5XuRFyEuduUA
   coverity_token:
     secure: xZnMqxFHZN9mENgS6gGTtlz7hadzkcHVgp5HRGML4XY=
   coverity_email:
@@ -31,6 +29,8 @@ platform: Any CPU
 cache:
   - src\packages -> **\packages.config
   - vendor\ -> Gemfile.lock
+  - C:\ProgramData\chocolatey\bin -> appveyor.yml
+  - C:\ProgramData\chocolatey\lib -> appveyor.yml
 
 build:
   parallel: true
