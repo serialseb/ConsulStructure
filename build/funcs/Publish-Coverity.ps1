@@ -9,4 +9,5 @@ if ($env:APPVEYOR_REPO_TAG -eq $true) {
     -z coverity.zip `
     -d "AppVeyor Tagged Build($env:APPVEYOR_BUILD_VERSION)." `
     --codeVersion "$version"
+  Push-AppveyorArtifact coverity.zip -FileName "Coverity Report.zip"
 }

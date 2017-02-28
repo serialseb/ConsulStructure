@@ -1,5 +1,5 @@
 
-$Solution = "$($env:APPVEYOR_BUILD_FOLDER)/src/ConsulStructure.sln"
+$Solution = $env:SEB_SLN
 
 $buildCmd = "C:\Program Files (x86)\MSBuild\14.0\bin\msbuild.exe"
 $buildArgs = @(
@@ -16,3 +16,4 @@ if ($env:APPVEYOR_REPO_TAG -eq $false) {
   "Building project with Coverity Scan..."
   cov-build --dir cov-int $buildCmd $buildArgs;
 }
+Push-AppveyorArtifact coverity.zip -FileName "Coverity Report.zip"

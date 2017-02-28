@@ -1,0 +1,1 @@
+nuget restore $env:SEB_SLN

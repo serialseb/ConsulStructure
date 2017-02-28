@@ -4,10 +4,10 @@ environment:
     secure: sR+OO2wYopy1MdZX+asECm56PinUUuIHNQXcAfSmVlf6lw6y4I5jOiby5IqsuwyP
   GITHUB_TOKEN:
     secure: LWCRPexJEGMkW0f8ku8Q45CPnQDCi4sgyi/cFdOHizI9ToLlDYozXxI21bD9cDU4
-  github_username: serialseb
-  github_password:
-    secure:
-      1lXaOJ0GvCAOd0O9DDvVqw2eb7TvP2jve12u3hD2g4J7RVW2c2jC5XuRFyEuduUA
+  # github_username: serialseb
+  # github_password:
+  #   secure:
+  #     1lXaOJ0GvCAOd0O9DDvVqw2eb7TvP2jve12u3hD2g4J7RVW2c2jC5XuRFyEuduUA
   coverity_token:
     secure: xZnMqxFHZN9mENgS6gGTtlz7hadzkcHVgp5HRGML4XY=
   coverity_email:
@@ -30,15 +30,7 @@ platform: Any CPU
 
 cache:
   - src\packages -> **\packages.config
-
-install:
-  - set PATH=C:\Ruby23\bin;%PATH%
-  - ps: mkdir c:\ca; iwr http://curl.haxx.se/ca/cacert.pem -outfile C:\ca\cacert.pem
-  - set SSL_CERT_FILE=C:\ca\cacert.pem
-  - ps: build/Set-Version.ps1
-
-before_build:
-  - nuget restore src/ConsulStructure.sln
+  - vendor/bundle --> Gemfile.lock
 
 build:
   parallel: true
@@ -48,26 +40,26 @@ build:
   include_nuget_references: true
   project: src/ConsulStructure.sln
 
+install:
+  - ps: ./build/Install.ps1
+
+before_build:
+  - ps: ./build/Before-Build.ps1
+
 build_script:
-  - ps: echo (get-location)
-  - ps: build/Build-Solution.ps1
+  - ps: ./build/Build-Script.ps1
 
 after_build:
-  - ps: build/Publish-Coverity.ps1
-  - ps: build/Create-Package.ps1
+  - ps: ./build/After-Build.ps1
 
 artifacts:
- - path: src/openrasta/bin/$(configuration)/*.dll
+ - path: src/ConsulStructure/bin/$(configuration)/*.dll
    name: dlls
- - path: src/openrasta/bin/$(configuration)/*.pdb
+ - path: src/ConsulStructure/bin/$(configuration)/*.pdb
    name: pdbs
- - path: '*.nupkg'
- - path: opencoverCoverage.xml
- - path: coverity.zip
-   name: Coverity Build
 
 test_script:
-- ps: build/Test-Code.ps1
+- ps: ./build/Test-Script.ps1
 
 deploy:
  - provider: NuGet
