@@ -26,4 +26,5 @@ Set-AppveyorBuildVariable -Name "AssemblyMajor" -Value "$major"
 Update-AppVeyorBuild -Version "$version"
 
 $env:SEB_VERSION_PREFIX = $buildVersionPrefix
+Write-Host "Version '{$version}' with prefix {$env:SEB_VERSION_PREFIX}"
 ruby bin/chandler push
