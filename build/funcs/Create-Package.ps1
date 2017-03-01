@@ -2,7 +2,7 @@ $repo = $env:APPVEYOR_REPO_NAME
 
 function Get-GitHubRepo([string]$uri="") {
     if ($uri -ne "" -and -not $uri.StartsWith("/")) { $uri = "/$uri" }
-    $finalUri = "https://api.github.com/repos/$repo$uri?access_token=$($env:GITHUB_TOKEN)"
+    $finalUri = "https://api.github.com/repos/$repo$uri" + '?access_token=' + $($env:GITHUB_TOKEN)"
     write-host "Issuing request to $finalUri"
     Invoke-WebRequest -Uri $finalUri | ConvertFrom-Json
 }
