@@ -4,7 +4,7 @@ $build = $env:APPVEYOR_BUILD_NUMBER | % PadLeft 4 '0'
 $major = $version.Major
 $branch = $env:APPVEYOR_REPO_BRANCH
 
-if ($env:APPVEYOR_REPO_TAG){
+if ($env:APPVEYOR_REPO_TAG) {
     $version = $env:APPVEYOR_REPO_TAG_NAME
     $buildVersionPrefix = $version
 } else {
