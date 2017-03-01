@@ -12,17 +12,18 @@ $releaseNotes = 'Pre-release, see https://github.com/serialseb/ConsulStructure/b
 $nuspecPath = "$($env:APPVEYOR_BUILD_FOLDER)\$($env:SEB_PROJECT_NAME).nuspec"
 $nuspec = [xml](Get-Content $nuspecPath)
 
-if ($env:APPVEYOR_REPO_TAG -eq $true) {
+if ($env:APPVEYOR_REPO_TAG) {
     $releaseNotes = Get-GitHubRepo("releases/tags/$($env:APPVEYOR_REPO_TAG_NAME)").body.Replace('"','\"').Replace('### ', '')
-    echo "Release notes: $releaseNotes"
     if ($releaseNotes){ 
-    $nuspec.package.metadata.releaseNotes = $releaseNotes
+        $nuspec.package.metadata.releaseNotes = $releaseNotes
+    }
 }
-}
+echo "Release notes: $releaseNotes"
+
 $repoInfo = Get-GitHubRepo
 echo "Switching license to $env:APPVEYOR_REPO_COMMIT"
 if ($repoInfo.description) {
-$nuspec.package.metadata.description = $repoInfo.description
+    $nuspec.package.metadata.description = $repoInfo.description
 }
 $nuspec.package.metadata.licenseUrl = "https://github.com/$($env:APPVEYOR_REPO_NAME)/tree/$env:APPVEYOR_REPO_COMMIT/LICENSE.md"
 $nuspec.Save($nuspecPath)
