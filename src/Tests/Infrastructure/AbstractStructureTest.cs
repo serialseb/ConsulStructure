@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using ConsulStructure;
 
-namespace ConsulStructure.Tests.Infrastructure
+namespace Tests.Infrastructure
 {
     public abstract class AbstractStructureTest
     {

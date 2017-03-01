@@ -1,9 +1,10 @@
-﻿using ConsulStructure.Tests.Examples;
-using ConsulStructure.Tests.Infrastructure;
+﻿using ConsulStructure;
 using Shouldly;
+using Tests.Examples;
+using Tests.Infrastructure;
 using Xunit;
 
-namespace ConsulStructure.Tests.typed
+namespace Tests.typed
 {
     public class discovering_keys : AbstractStructureTest
     {

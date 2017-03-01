@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using ConsulStructure.Tests.Examples;
-using ConsulStructure.Tests.Infrastructure;
+using ConsulStructure;
 using Shouldly;
+using Tests.Examples;
+using Tests.Infrastructure;
 using Xunit;
 
-namespace ConsulStructure.Tests.http
+namespace Tests.http
 {
     public class successful : AbstractHttpMemoryTest
     {

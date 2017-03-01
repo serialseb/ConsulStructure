@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ConsulStructure.Tests.Infrastructure
+namespace Tests.Infrastructure
 {
     public class AwaitableQueue<T>
     {

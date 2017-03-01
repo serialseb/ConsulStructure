@@ -1,8 +1,9 @@
-﻿using ConsulStructure.Tests.Infrastructure;
+﻿using ConsulStructure;
 using Shouldly;
+using Tests.Infrastructure;
 using Xunit;
 
-namespace ConsulStructure.Tests.Examples
+namespace Tests.Examples
 {
     public class Tests : AbstractStructureTest
     {

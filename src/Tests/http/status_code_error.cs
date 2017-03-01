@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using ConsulStructure.Tests.Examples;
-using ConsulStructure.Tests.Infrastructure;
+using ConsulStructure;
 using Shouldly;
+using Tests.Examples;
+using Tests.Infrastructure;
 using Xunit;
 
-namespace ConsulStructure.Tests.http
+namespace Tests.http
 {
     public class status_code_error : AbstractHttpMemoryTest
     {

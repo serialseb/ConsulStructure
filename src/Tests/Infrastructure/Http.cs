@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ConsulStructure.Tests.Infrastructure
+namespace Tests.Infrastructure
 {
     public static class Http
     {

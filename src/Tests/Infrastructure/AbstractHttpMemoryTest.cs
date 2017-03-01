@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ConsulStructure;
 using Microsoft.Owin;
 using Microsoft.Owin.Builder;
 using Microsoft.Owin.Testing;
 using Owin;
 using AppFunc = System.Func<Microsoft.Owin.IOwinContext, System.Threading.Tasks.Task>;
 
-namespace ConsulStructure.Tests.Infrastructure
+namespace Tests.Infrastructure
 {
     public abstract class AbstractHttpMemoryTest : AbstractStructureTest
     {

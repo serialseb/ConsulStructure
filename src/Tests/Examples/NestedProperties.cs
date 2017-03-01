@@ -1,4 +1,4 @@
-﻿namespace ConsulStructure.Tests.Examples
+﻿namespace Tests.Examples
 {
     public class NestedProperties
     {

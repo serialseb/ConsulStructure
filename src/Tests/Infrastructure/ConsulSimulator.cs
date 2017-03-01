@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Owin;
 
-namespace ConsulStructure.Tests.Infrastructure
+namespace Tests.Infrastructure
 {
     public class ConsulSimulator
     {

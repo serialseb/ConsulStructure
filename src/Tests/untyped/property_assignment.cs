@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ConsulStructure.Tests.Infrastructure;
+using ConsulStructure;
 using Shouldly;
+using Tests.Infrastructure;
 using Xunit;
 
-namespace ConsulStructure.Tests.untyped
+namespace Tests.untyped
 {
     public class property_assignment : AbstractHttpMemoryTest
     {
