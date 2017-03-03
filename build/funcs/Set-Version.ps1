@@ -8,9 +8,9 @@ if ($env:APPVEYOR_REPO_TAG) {
     $version = $env:APPVEYOR_REPO_TAG_NAME
     $buildVersionPrefix = $version
 } else {
-    $buildsForBranch = "/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=4000&branch=$branch"
-    $lastBuild = (Invoke-WebRequest -Uri $buildsForBranch) | ConvertFrom-Json
-    $lastBuildVersion = $lastBuild.build.version
+    # $buildsForBranch = "/api/projects/$env:APPVEYOR_ACCOUNT_NAME/$env:APPVEYOR_PROJECT_SLUG/history?recordsNumber=4000&branch=$branch"
+    # $lastBuild = (Invoke-WebRequest -Uri $buildsForBranch) | ConvertFrom-Json
+    # $lastBuildVersion = $lastBuild.build.version
 
     if ($branch -eq 'master') {
         $buildVersionPrefix = "$version-ci"
@@ -22,9 +22,10 @@ if ($env:APPVEYOR_REPO_TAG) {
     }
 }
 
+$env:SEB_VERSION_PREFIX = $buildVersionPrefix
+Write-Host "Version '$version', base '$baseVersion', prefix $env:SEB_VERSION_PREFIX"
+
 Set-AppveyorBuildVariable -Name "AssemblyMajor" -Value "$major"
 Update-AppVeyorBuild -Version "$version"
 
-$env:SEB_VERSION_PREFIX = $buildVersionPrefix
-Write-Host "Version '{$version}' with prefix {$env:SEB_VERSION_PREFIX}"
 ruby bin/chandler push
