@@ -1,6 +1,6 @@
-$version = [version]$(cat VERSION)
-$baseVersion = $version.ToString()
-$build = $env:APPVEYOR_BUILD_NUMBER | % PadLeft 4 '0'
+$baseVersion = $(cat VERSION)
+$version = [version]$(baseVersion)
+$build = $env:APPVEYOR_BUILD_NUMBER
 $major = $version.Major
 $branch = $env:APPVEYOR_REPO_BRANCH
 
@@ -14,12 +14,12 @@ if ($env:APPVEYOR_REPO_TAG -eq $true) {
 
     if ($branch -eq 'master') {
         $buildVersionPrefix = "$baseVersion-ci"
-        $version = "$buildVersionPrefix-$build"
     }
     else {
-        $buildVersionPrefix = "$baseVersion-b"
-        $version = "$buildVersionPrefix-$branch-$build"
+        $buildVersionPrefix = "$baseVersion-b-$branch"
     }
+
+    $version = "$buildVersionPrefix+$build"
 }
 
 $env:SEB_VERSION_PREFIX = $buildVersionPrefix
