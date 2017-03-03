@@ -1,10 +1,10 @@
 $version = [version]$(cat VERSION)
-$baseVersion = $version
+$baseVersion = $version.ToString()
 $build = $env:APPVEYOR_BUILD_NUMBER | % PadLeft 4 '0'
 $major = $version.Major
 $branch = $env:APPVEYOR_REPO_BRANCH
 
-if ($env:APPVEYOR_REPO_TAG) {
+if ($env:APPVEYOR_REPO_TAG -eq $true) {
     $version = $env:APPVEYOR_REPO_TAG_NAME
     $buildVersionPrefix = $version
 } else {
@@ -23,7 +23,7 @@ if ($env:APPVEYOR_REPO_TAG) {
 }
 
 $env:SEB_VERSION_PREFIX = $buildVersionPrefix
-Write-Host "Version '$version', base '$baseVersion', prefix $env:SEB_VERSION_PREFIX"
+Write-Host "Version '$version', base '$baseVersion', prefix '$env:SEB_VERSION_PREFIX"
 
 Set-AppveyorBuildVariable -Name "AssemblyMajor" -Value "$major"
 Update-AppVeyorBuild -Version "$version"
