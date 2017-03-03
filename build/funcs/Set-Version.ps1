@@ -13,11 +13,11 @@ if ($env:APPVEYOR_REPO_TAG) {
     # $lastBuildVersion = $lastBuild.build.version
 
     if ($branch -eq 'master') {
-        $buildVersionPrefix = "$version-ci"
+        $buildVersionPrefix = "$baseVersion-ci"
         $version = "$buildVersionPrefix-$build"
     }
     else {
-        $buildVersionPrefix = "$version-b"
+        $buildVersionPrefix = "$baseVersion-b"
         $version = "$buildVersionPrefix-$branch-$build"
     }
 }
