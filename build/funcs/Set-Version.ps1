@@ -24,7 +24,7 @@ if ($env:APPVEYOR_REPO_TAG -eq $true) {
 
     
     $nugetBuild = "-$($build | % PadLeft 4 '0')"
-    $nugetSuffix = $buildVersionSuffix.Substring([math]::min(15, $buildVersionSuffix.Length))
+    $nugetSuffix = $buildVersionSuffix.Substring(0,[math]::min(15, $buildVersionSuffix.Length))
     
     $nugetVersion = "$buildVersionPrefix$nugetSuffix$nugetBuild"
 }
