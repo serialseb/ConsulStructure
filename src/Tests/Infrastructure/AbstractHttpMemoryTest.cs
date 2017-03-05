@@ -36,9 +36,11 @@ namespace Tests.Infrastructure
 
         protected readonly ConsulSimulator ConsulSimulator = new ConsulSimulator();
 
-        internal Structure.Options TestOptions(Func<AppFunc, AppFunc> responseMiddleware = null)
+        internal Structure.Options TestOptions(
+            Func<AppFunc, AppFunc> responseMiddleware = null,
+            Action<Structure.Options> more = null)
         {
-            return new Structure.Options
+            var testOptions = new Structure.Options
             {
                 Factories =
                 {
@@ -59,6 +61,8 @@ namespace Tests.Infrastructure
                     }
                 }
             };
+            more?.Invoke(testOptions);
+            return testOptions;
         }
     }
 }

@@ -13,6 +13,7 @@ namespace ConsulStructure
         {
             internal delegate Task<HttpResponseMessage> Invoker(HttpRequestMessage request);
 
+            internal static readonly HttpResponseMessage NullResponse = new HttpResponseMessage();
             internal static async Task<int> WaitForChanges(
                 Invoker sender,
                 string prefix,

@@ -9,33 +9,6 @@ using Xunit;
 
 namespace Tests.http
 {
-    public class cancellations : AbstractHttpMemoryTest
-    {
-        [Fact]
-        public async Task during_http_call()
-        {
-            var listener = Structure.Start(
-                new SimpleProperties(),
-                TestOptions(next => async env =>
-                {
-                    await Task.Delay(TimeSpan.FromMinutes(10));
-                    await next(env);
-                }));
-            await listener.Stop();
-        }
-
-        [Fact]
-        public async Task during_backoff()
-        {
-            var listener = Structure.Start(
-                new SimpleProperties(),
-                TestOptions(next => env => env.Response(500)));
-
-            // ensure we get to good exponential
-            await Task.Delay(TimeSpan.FromSeconds(3));
-            await listener.Stop();
-        }
-    }
     public class http_errors : AbstractHttpMemoryTest
     {
         [Fact]

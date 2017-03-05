@@ -17,6 +17,7 @@ namespace ConsulStructure
             readonly HttpClient _client;
             readonly CancellationTokenSource _dispose = new CancellationTokenSource();
             readonly Task _loop;
+            readonly Func<TimeSpan, TimeSpan> _backoff;
 
             public BlockingHttpWatcher(
                 Action<IEnumerable<KeyValuePair<string, byte[]>>> configurationReceived,
@@ -25,6 +26,7 @@ namespace ConsulStructure
                 _configurationReceived = configurationReceived;
                 _options = options;
                 _client = _options.Factories.HttpClient(_options);
+                _backoff = existing => options.HttpBackoff(options, existing);
                 _loop = Run();
             }
 
@@ -44,18 +46,20 @@ namespace ConsulStructure
                 };
             }
 
-            static readonly double maxBackoff = TimeSpan.FromMinutes(10).TotalSeconds;
-            static readonly HttpResponseMessage NullMessage = new HttpResponseMessage();
-
-            static Func<Http.Invoker, Http.Invoker> ExponentialBackoff(CancellationToken disposer)
+            static Func<Http.Invoker, Http.Invoker> ExponentialBackoff(
+                Func<TimeSpan,TimeSpan> backoffAlgo,
+                CancellationToken disposer)
             {
                 return next => async request =>
                 {
                     var backoff = TimeSpan.FromSeconds(1);
+                    var nullMessage = Http.NullResponse;
                     do
                     {
+                        disposer.ThrowIfCancellationRequested();
+
                         var response = await next(request);
-                        if (response != NullMessage)
+                        if (response != nullMessage)
                             return response;
 
                         await Task.Delay(backoff, disposer);
@@ -65,10 +69,8 @@ namespace ConsulStructure
                         foreach (var h in previous.Headers)
                             request.Headers.Add(h.Key, h.Value);
 
-                        backoff = TimeSpan.FromSeconds(Math.Min(maxBackoff, Math.Exp(backoff.TotalSeconds)));
-                    } while (!disposer.IsCancellationRequested);
-
-                    return NullMessage;
+                        backoff = backoffAlgo(backoff);
+                    } while (true);
                 };
             }
 
@@ -89,7 +91,7 @@ namespace ConsulStructure
                     catch (Exception e)
                     {
                         error(e);
-                        return NullMessage;
+                        return Http.NullResponse;
                     }
                 };
             }
@@ -119,7 +121,7 @@ namespace ConsulStructure
             Http.Invoker Invoker()
             {
                 return
-                    ExponentialBackoff(_dispose.Token)
+                    ExponentialBackoff(_backoff, _dispose.Token)
                     (CatchExceptions(e => _options.Events.HttpError(e), _dispose.Token)
                     (Capture(_options.Events.HttpSuccess)
                         (CheckResponseValid(Send(_client, _dispose.Token)))));
@@ -136,11 +138,11 @@ namespace ConsulStructure
                             Invoker(),
                             _options.Prefix,
                             _configurationReceived,
-                            _options.Timeout,
+                            _options.HttpTimeout,
                             idx,
                             _options.Converters.KeyParser);
                     }
-                    catch (OperationCanceledException)
+                    catch (OperationCanceledException cancelled) when (cancelled.CancellationToken == _dispose.Token)
                     {
                         return;
                     }

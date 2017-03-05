@@ -17,7 +17,7 @@ namespace ConsulStructure
                 options => new HttpClient
                 {
                     BaseAddress = options.ConsulUri,
-                    Timeout = options.Timeout
+                    Timeout = options.HttpTimeout
                 };
         }
     }
