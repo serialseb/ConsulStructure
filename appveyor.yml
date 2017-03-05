@@ -31,6 +31,7 @@ cache:
   - vendor\ -> Gemfile.lock
   - C:\ProgramData\chocolatey\bin -> appveyor.yml
   - C:\ProgramData\chocolatey\lib -> appveyor.yml
+  - C:\Users\appveyor\.sonar\cache
 
 build:
   parallel: true

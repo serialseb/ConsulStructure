@@ -28,13 +28,13 @@ To get started, you can use nuget to install ConsulStructure.
 Using the package manager console:
 
 ```powerhsell
-Install-Package ConsulStructure
+Install-Package ConsulStructure -pre
 ```
 
 Using the command line client:
 
 ```cmd
-nuget install ConsulStructure
+nuget install ConsulStructure -pre
 ```
 
 To start receiving updates from Consul into your settings, it's one line, no dependencies,
@@ -91,10 +91,10 @@ json using the excellent SimpleJson library.
  - [x] Test HTTP part of the library
  - [x] Create AppVeyor / Travis build
  - [x] Create nuget package
- - [ ] Publish to nuget
+ - [x] Publish to nuget
  - [ ] Add all base datatype converters
  - [ ] Add converters for go's way of writing data (dates and timespans come to mind)
- - [ ] Exponential back off strategy
+ - [x] Exponential back off strategy
 
 ## Credits
 
