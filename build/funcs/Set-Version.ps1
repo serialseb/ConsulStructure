@@ -1,5 +1,5 @@
 $baseVersion = $(cat VERSION)
-$version = [version]$(baseVersion)
+$version = [version]$baseVersion
 $build = $env:APPVEYOR_BUILD_NUMBER
 $major = $version.Major
 $branch = $env:APPVEYOR_REPO_BRANCH
