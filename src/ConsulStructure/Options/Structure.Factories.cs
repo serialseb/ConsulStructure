@@ -5,20 +5,23 @@ using System.Threading.Tasks;
 
 namespace ConsulStructure
 {
-    partial class Structure
+  partial class Structure
+  {
+    internal class Factories
     {
-        internal class Factories
+      public delegate Func<Task> WatcherDelegate(
+        Action<IEnumerable<KeyValuePair<string, byte[]>>> onChanges,
+        Options options);
+
+      public WatcherDelegate Watcher { get; set; } =
+        (onChanges, options) => new BlockingHttpWatcher(onChanges, options).Stop;
+
+      public Func<Options, HttpClient> HttpClient { get; set; } =
+        options => new HttpClient
         {
-            public delegate Func<Task> WatcherDelegate(Action<IEnumerable<KeyValuePair<string, byte[]>>> onChanges, Options options);
-
-            public WatcherDelegate Watcher { get; set; } = (onChanges, options) => new BlockingHttpWatcher(onChanges, options).Stop;
-
-            public Func<Options, HttpClient> HttpClient { get; set; } =
-                options => new HttpClient
-                {
-                    BaseAddress = options.ConsulUri,
-                    Timeout = options.HttpTimeout
-                };
-        }
+          BaseAddress = options.ConsulUri,
+          Timeout = options.HttpTimeout
+        };
     }
+  }
 }
