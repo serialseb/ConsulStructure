@@ -4,5 +4,8 @@ root = true
 indent_style = space
 indent_size = 2
 
-[package.config]
+[*.sln]
+end_of_line = crlf
+
+[packages.config]
 end_of_line = crlf
