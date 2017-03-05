@@ -28,7 +28,8 @@ namespace ConsulStructure
                 _loop = Run();
             }
 
-            static Func<Http.Invoker, Http.Invoker> Capture(Action<HttpRequestMessage, HttpResponseMessage, TimeSpan> capture)
+            static Func<Http.Invoker, Http.Invoker> Capture(
+                Action<HttpRequestMessage, HttpResponseMessage, TimeSpan> capture)
             {
                 return next => async request =>
                 {
@@ -45,6 +46,7 @@ namespace ConsulStructure
 
             static readonly double maxBackoff = TimeSpan.FromMinutes(10).TotalSeconds;
             static readonly HttpResponseMessage NullMessage = new HttpResponseMessage();
+
             static Func<Http.Invoker, Http.Invoker> ExponentialBackoff(CancellationToken disposer)
             {
                 return next => async request =>
@@ -57,12 +59,19 @@ namespace ConsulStructure
                             return response;
 
                         await Task.Delay(backoff, disposer);
+                        var previous = request;
+                        request = new HttpRequestMessage(previous.Method, previous.RequestUri);
+
+                        foreach (var h in previous.Headers)
+                            request.Headers.Add(h.Key, h.Value);
+
                         backoff = TimeSpan.FromSeconds(Math.Min(maxBackoff, Math.Exp(backoff.TotalSeconds)));
                     } while (!disposer.IsCancellationRequested);
 
                     return NullMessage;
                 };
             }
+
             static Func<Http.Invoker, Http.Invoker> CatchExceptions(
                 Action<Exception> error,
                 CancellationToken dispose)
@@ -111,9 +120,9 @@ namespace ConsulStructure
             {
                 return
                     ExponentialBackoff(_dispose.Token)
-                    (CatchExceptions(e=>_options.Events.HttpError(e), _dispose.Token)
+                    (CatchExceptions(e => _options.Events.HttpError(e), _dispose.Token)
                     (Capture(_options.Events.HttpSuccess)
-                    (CheckResponseValid(Send(_client, _dispose.Token)))));
+                        (CheckResponseValid(Send(_client, _dispose.Token)))));
             }
 
             async Task Run()
