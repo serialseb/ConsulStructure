@@ -1,28 +1,37 @@
 <?xml version="1.0"?>
 <package>
-  <metadata>
-    <id>ConsulStructure</id>
-    <version>$version$</version>
-    <title>ConsulStructure</title>
-    <authors>serialseb</authors>
-    <owners>serialseb</owners>
-    <developmentDependency>true</developmentDependency>
-    <licenseUrl>https://github.com/serialseb/ConsulStructure/tree/master/LICENSE.md</licenseUrl>
-    <projectUrl>https://github.com/serialseb/ConsulStructure/</projectUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>No-frill no-dependency Consul Configuration.</description>
-    <copyright>Copyright 2017 Sebastien Lambla</copyright>
-    <tags>Consul Configuration</tags>
-    <releaseNotes>$releaseNotes$</releaseNotes>
-    <contentFiles>
-      <files include="contentFiles\cs\**\*.*" buildAction="compile" />
-    </contentFiles>
-    <dependencies>
-      <dependency id="System.Net.Http" version="[4,5)" />
-    </dependencies>
-  </metadata>
-  <files>
-    <file src="**/*.cs" exclude="bin/**/*.*;obj/**/*.*;Properties/**/*.*;Tests/**/*" target="contentFiles/cs/any/App_Packages/ConsulStructure.$version$" />
-    <file src="**/*.cs" exclude="bin/**/*.*;obj/**/*.*;Properties/**/*.*;Tests/**/*" target="content/App_Packages/ConsulStructure.$version$" />
-  </files>
+    <metadata>
+        <id>ConsulStructure</id>
+        <version>$version$</version>
+        <title>ConsulStructure</title>
+        <authors>serialseb</authors>
+        <owners>serialseb</owners>
+        <developmentDependency>true</developmentDependency>
+        <licenseUrl>https://github.com/serialseb/ConsulStructure/tree/master/LICENSE.md</licenseUrl>
+        <projectUrl>https://github.com/serialseb/ConsulStructure/</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>No-frill no-dependency Consul Configuration.</description>
+        <copyright>Copyright 2017 Sebastien Lambla</copyright>
+        <tags>Consul Configuration</tags>
+        <releaseNotes>$releaseNotes$</releaseNotes>
+        <contentFiles>
+            <files include="contentFiles\cs\**\*.*" buildAction="compile"/>
+        </contentFiles>
+        <dependencies>
+            <group>
+                <dependency id="System.Net.Http"/>
+            </group>
+            <group targetFramework="net45">
+            </group>
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System.Net.Http" targetFramework="net45" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="**/*.cs" exclude="bin/**/*.*;obj/**/*.*;Properties/**/*.*;Tests/**/*"
+              target="contentFiles/cs/any/App_Packages/ConsulStructure.$version$"/>
+        <file src="**/*.cs" exclude="bin/**/*.*;obj/**/*.*;Properties/**/*.*;Tests/**/*"
+              target="content/App_Packages/ConsulStructure.$version$"/>
+    </files>
 </package>
