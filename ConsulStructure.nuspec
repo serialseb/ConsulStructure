@@ -22,6 +22,7 @@
                 <dependency id="System.Net.Http"/>
             </group>
             <group targetFramework="net45">
+            
             </group>
         </dependencies>
         <frameworkAssemblies>

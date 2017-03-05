@@ -18,5 +18,3 @@ if ($env:APPVEYOR_REPO_TAG -eq $false) {
   "Building project with Coverity Scan..."
   cov-build --dir cov-int $buildCmd $buildArgs
 }
-
-Push-AppveyorArtifact coverity.zip -FileName "Coverity Report.zip"
