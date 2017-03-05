@@ -19,6 +19,19 @@ namespace Tests.http
         }
 
         [Fact]
+        public async Task same_index_understood_as_no_change()
+        {
+            var config = new SimpleProperties();
+            var updater = Structure.Start(config, TestOptions(next=>env=>env.Response(200,0)));
+
+            await HttpSuccesses.Dequeue();
+            HttpErrors.Count.ShouldBe(0);
+            KeyValuesAssigned.Count.ShouldBe(0);
+
+            await updater.Stop();
+        }
+
+        [Fact]
         public async Task key_is_assigned_repeatedly()
         {
             var config = new SimpleProperties();

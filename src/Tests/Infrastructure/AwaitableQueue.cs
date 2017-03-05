@@ -19,5 +19,7 @@ namespace Tests.Infrastructure
             await awaitable.WaitOne();
             return queue.Dequeue();
         }
+
+        public int Count => queue.Count;
     }
 }

@@ -105,9 +105,15 @@ namespace ConsulStructure
                     if (!response.IsSuccessStatusCode)
                         throw new InvalidOperationException("Response code was not 200");
 
-                    if (!response.Headers.Contains("X-Consul-Index") ||
-                        response.Headers.GetValues("X-Consul-Index").Count() != 1)
+                    if (!response.Headers.Contains("X-Consul-Index"))
                         throw new InvalidOperationException("Missing X-Consul-Index header");
+
+                    if (response.Headers.GetValues("X-Consul-Index").Count() > 1)
+                        throw new InvalidOperationException("Too mamy X-Consul-Index headers");
+
+                    int ignored;
+                    if (!int.TryParse(response.Headers.GetValues("X-Consul-Index").Single(), out ignored))
+                        throw new InvalidOperationException("NaN X-Consul-Index header");
 
                     return response;
                 };

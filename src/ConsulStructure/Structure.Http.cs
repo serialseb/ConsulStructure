@@ -25,12 +25,8 @@ namespace ConsulStructure
                 var request = new HttpRequestMessage(HttpMethod.Get, CreateKvPrefixUri(prefix, timeout, existingIndex));
                 var response = await sender(request);
 
-                var indexResponseHeader = response.Headers.GetValues("X-Consul-Index").Single();
-
-                int newIndex;
-                if (indexResponseHeader == null
-                    || !int.TryParse(indexResponseHeader, out newIndex)
-                    || newIndex <= existingIndex)
+                var newIndex = int.Parse(response.Headers.GetValues("X-Consul-Index").Single());
+                if (newIndex <= existingIndex)
                     return existingIndex;
 
                 result(parser(await response.Content.ReadAsStringAsync()));
