@@ -56,7 +56,7 @@ namespace ConsulStructure
                 _options.Events.KeyValuesAssigned(assigned);
             }
 
-            public Task Dispose()
+            public Task Close()
             {
                 return _watcherDisposer();
             }

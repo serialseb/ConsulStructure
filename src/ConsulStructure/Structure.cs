@@ -11,14 +11,14 @@ namespace ConsulStructure
         {
             options = options ?? new Options();
 
-            return new Structure(new LambdaStructureWatcher(instance, options).Dispose);
+            return new Structure(new LambdaStructureWatcher(instance, options).Stop);
         }
 
         internal static Structure Start<T>(T instance, Options options = null)
         {
             options = options ?? new Options();
 
-            return new Structure(new StructureWatcher<T>(instance, options).Dispose);
+            return new Structure(new StructureWatcher<T>(instance, options).Close);
         }
 
         readonly Func<Task> _stopper;

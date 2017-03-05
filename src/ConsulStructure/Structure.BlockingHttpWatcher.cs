@@ -58,7 +58,7 @@ namespace ConsulStructure
 
                         await Task.Delay(backoff, disposer);
                         backoff = TimeSpan.FromSeconds(Math.Min(maxBackoff, Math.Exp(backoff.TotalSeconds)));
-                    } while (disposer.IsCancellationRequested == false);
+                    } while (!disposer.IsCancellationRequested);
 
                     return NullMessage;
                 };
@@ -91,10 +91,10 @@ namespace ConsulStructure
                 {
                     var response = await inner(request);
 
-                    if (response.IsSuccessStatusCode == false)
+                    if (!response.IsSuccessStatusCode)
                         throw new InvalidOperationException("Response code was not 200");
 
-                    if (response.Headers.Contains("X-Consul-Index") == false ||
+                    if (!response.Headers.Contains("X-Consul-Index") ||
                         response.Headers.GetValues("X-Consul-Index").Count() != 1)
                         throw new InvalidOperationException("Missing X-Consul-Index header");
 
@@ -119,7 +119,7 @@ namespace ConsulStructure
             async Task Run()
             {
                 var idx = 0;
-                while (_dispose.IsCancellationRequested == false)
+                while (!_dispose.IsCancellationRequested)
                 {
                     try
                     {
@@ -140,7 +140,7 @@ namespace ConsulStructure
 
             public async Task Stop()
             {
-                if (_dispose.IsCancellationRequested == false)
+                if (!_dispose.IsCancellationRequested)
                     _dispose.Cancel();
                 await _loop;
                 _client.Dispose();

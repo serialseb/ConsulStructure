@@ -29,7 +29,7 @@ namespace ConsulStructure
                                  .ToList());
             }
 
-            public Task Dispose()
+            public Task Stop()
             {
                 return _watcherDisposer();
             }
