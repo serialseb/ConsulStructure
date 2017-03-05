@@ -84,7 +84,7 @@ namespace ConsulStructure
                     {
                         return await next(env);
                     }
-                    catch (OperationCanceledException cancel) when (cancel.CancellationToken == dispose)
+                    catch (OperationCanceledException) when (dispose.IsCancellationRequested)
                     {
                         throw;
                     }
@@ -148,7 +148,7 @@ namespace ConsulStructure
                             idx,
                             _options.Converters.KeyParser);
                     }
-                    catch (OperationCanceledException cancelled) when (cancelled.CancellationToken == _dispose.Token)
+                    catch (OperationCanceledException) when (_dispose.Token.IsCancellationRequested)
                     {
                         return;
                     }
