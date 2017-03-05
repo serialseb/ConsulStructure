@@ -1,7 +1,7 @@
 $sonarBuildId = "com:github:$($env:APPVEYOR_REPO_NAME.Replace("/", ":"))"
 $branchParam = ""
 
-if ($env:APPVEYOR_REPO_TAG -eq $true) { $branchParam = "/d:sonar.branch=$env:APPVEYOR_REPO_BRANCH"}
+if ($env:APPVEYOR_REPO_BRANCH -ne "master") { $branchParam = "/d:sonar.branch=$env:APPVEYOR_REPO_BRANCH" }
 
 Write-Host "SONARQUBE: set branch parameter to '$branchParam'"
 MSBuild.SonarQube.Runner.exe begin `
