@@ -28,5 +28,5 @@ if ($repoInfo.description) {
 $nuspec.package.metadata.licenseUrl = "https://github.com/$($env:APPVEYOR_REPO_NAME)/tree/$env:APPVEYOR_REPO_COMMIT/LICENSE.md"
 $nuspec.Save($nuspecPath)
 write-host "Saved NuSpec at $nuspecPath"
-nuget pack $nuspecPath.nuspec -Properties releaseNotes="$releaseNotes" -version $env:APPVEYOR_BUILD_VERSION -basepath $env:APPVEYOR_BUILD_FOLDER/src/$env:SEB_PROJECT_NAME/
+nuget pack $nuspecPath.nuspec -Properties releaseNotes="$releaseNotes" -version $env:NUGET_VERSION -basepath $env:APPVEYOR_BUILD_FOLDER/src/$env:SEB_PROJECT_NAME/
 Push-AppveyorArtifact *.nupkg
