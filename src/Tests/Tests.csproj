@@ -71,7 +71,6 @@
   <ItemGroup>
     <Compile Include="Examples\NestedProperties.cs" />
     <Compile Include="Examples\SimpleProperties.cs" />
-    <Compile Include="Examples\Tests.cs" />
     <Compile Include="http\http_errors.cs" />
     <Compile Include="http\successful.cs" />
     <Compile Include="Infrastructure\AbstractHttpMemoryTest.cs" />
