@@ -22,5 +22,11 @@ write-host "Release notes: $releaseNotes"
 write-host "License: $authors"
 write-host "Authors: $licenseUrl"
 
-nuget pack $nuspecPath.nuspec -Properties releaseNotes="$releaseNotes";authors="$authors";licenseUrl="$licenseUrl";projectUrl="$projectUrl";description="$description" -version $env:NUGET_VERSION -basepath $env:APPVEYOR_BUILD_FOLDER/src/$env:SEB_PROJECT_NAME/
+& nuget pack $nuspecPath.nuspec -Properties releaseNotes="$releaseNotes" `
+    -Properties "authors=$authors" `
+    -Properties "licenseUrl=$licenseUrl" `
+    -Properties "projectUrl=$projectUrl" `
+    -Properties "description=$description" `
+    -version $env:NUGET_VERSION `
+    -basepath $env:APPVEYOR_BUILD_FOLDER/src/$env:SEB_PROJECT_NAME/
 Push-AppveyorArtifact *.nupkg
