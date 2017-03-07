@@ -26,7 +26,7 @@ write-host "Project URL: $projectUrl"
 
 & nuget pack $nuspecPath.nuspec `
     -version $env:NUGET_VERSION `
-    -basepath $env:APPVEYOR_BUILD_FOLDER/src/$env:SEB_PROJECT_NAME/
+    -basepath $env:APPVEYOR_BUILD_FOLDER/src/$env:SEB_PROJECT_NAME/ `
     -Properties releaseNotes="$releaseNotes"`;authors="$authors"`;licenseUrl="$licenseUrl"`;projectUrl="$projectUrl"`;description="$description"
 
 Push-AppveyorArtifact *.nupkg
