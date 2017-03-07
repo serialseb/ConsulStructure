@@ -18,7 +18,7 @@
       <files include="contentFiles\cs\**\*.*" buildAction="compile" />
     </contentFiles>
     <dependencies>
-      <dependency id="System.Net.Http" version="4" />
+      <dependency id="System.Net.Http" version="4.0" />
     </dependencies>
   </metadata>
   <files>
