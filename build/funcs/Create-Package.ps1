@@ -18,15 +18,19 @@ $authors =  (git shortlog -sn | ? { $_ -match '^\s*(?<count>\d+)\s*(?<author>.*)
 $description = $repoInfo.description
 $licenseUrl = "https://github.com/$($env:APPVEYOR_REPO_NAME)/tree/$env:APPVEYOR_REPO_COMMIT/LICENSE.md"
 $projectUrl = "https://github.com/$($env:APPVEYOR_REPO_NAME)/"
-write-host "Release notes: $releaseNotes"
-write-host "License: $authors"
-write-host "Authors: $licenseUrl"
 
-& nuget pack $nuspecPath.nuspec -Properties releaseNotes="$releaseNotes" `
-    -Properties "authors=$authors" `
-    -Properties "licenseUrl=$licenseUrl" `
-    -Properties "projectUrl=$projectUrl" `
-    -Properties "description=$description" `
+write-host "Release notes: $releaseNotes"
+write-host "License URL: $licenseUrl"
+write-host "Authors: $authors"
+write-host "Project URL: $projectUrl"
+
+& nuget pack $nuspecPath.nuspec `
+    -Properties releaseNotes="$releaseNotes"`;`
+                authors="$authors"`;`
+                licenseUrl="$licenseUrl"`;`
+                projectUrl="$projectUrl"`;`
+                description="$description"`;`
     -version $env:NUGET_VERSION `
     -basepath $env:APPVEYOR_BUILD_FOLDER/src/$env:SEB_PROJECT_NAME/
+
 Push-AppveyorArtifact *.nupkg
