@@ -36,7 +36,7 @@ namespace Tests.http
             env.Response.Headers["X-Consul-Index"] = "nope";
             return env.Response(200);
           }));
-      ConsulSimulator.PutKey("/kv", "nope");
+      ConsulSimulator.PutKey("kv", "nope");
       var exception = await HttpErrors.Dequeue();
 
       exception.ShouldBeOfType<InvalidOperationException>();
@@ -57,7 +57,7 @@ namespace Tests.http
             return env.Response(200);
           }));
 
-      ConsulSimulator.PutKey("/kv", "nope");
+      ConsulSimulator.PutKey("kv", "nope");
       var exception = await HttpErrors.Dequeue();
 
       Trace.WriteLine(exception.Message);
@@ -99,7 +99,7 @@ namespace Tests.http
         new SimpleProperties(),
         TestOptions(next => env => (retries++ < 1 ? env.Response(500) : next(env))));
 
-      ConsulSimulator.PutKey("/keystring", "first");
+      ConsulSimulator.PutKey("keystring", "first");
 
       var success = await HttpSuccesses.Dequeue();
       success.Item2.StatusCode.ShouldBe((HttpStatusCode) 200);

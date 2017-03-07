@@ -80,12 +80,13 @@ namespace ConsulStructure
         ParameterExpression structureParam = null,
         Expression currentMemberExpr = null)
       {
+        baseKey = string.IsNullOrEmpty(baseKey) ? "" : EnsureTrailingSlash(baseKey);
         structureParam = structureParam ?? Expression.Parameter(typeof(T), "structure");
         currentMemberExpr = currentMemberExpr ?? structureParam;
         foreach (var property in current.GetProperties())
         {
           var propertyAccess = Expression.MakeMemberAccess(currentMemberExpr, property);
-          var currentKey = baseKey + "/" + property.Name;
+          var currentKey = baseKey + property.Name;
           Expression converterExpression;
           if (converters.TryGetValue(property.PropertyType, out converterExpression))
           {
@@ -116,6 +117,11 @@ namespace ConsulStructure
               yield return assigner;
           }
         }
+      }
+
+      static string EnsureTrailingSlash(string baseKey)
+      {
+        return baseKey.EndsWith("/") ? baseKey : baseKey + "/";
       }
     }
   }

@@ -20,6 +20,8 @@ namespace Tests.Infrastructure
 
     public void PutKey(string key, string value)
     {
+      if (key.StartsWith("/")) throw new ArgumentException("key");
+
       lock (kvStore)
       {
         kvStore[++currentIndex] = Tuple.Create(key, value);

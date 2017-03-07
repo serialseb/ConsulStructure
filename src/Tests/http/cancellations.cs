@@ -33,7 +33,7 @@ namespace Tests.http
               return existingBackoff(options, existing);
             };
           }));
-      ConsulSimulator.PutKey("/test", "1");
+      ConsulSimulator.PutKey("test", "1");
       await backoffAwaiter.WaitOne();
 
       // first request stopping

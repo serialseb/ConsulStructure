@@ -28,12 +28,12 @@ namespace Tests.untyped
 
       var updater = Structure.Start(keyReceiver, TestOptions());
 
-      ConsulSimulator.PutKey("/key", "/value");
+      ConsulSimulator.PutKey("key", "value");
       var assignedKv = await KeyValuesAssigned.Dequeue();
 
       receivedKey.ShouldBe(assignedKv.Single().Key);
-      receivedKey.ShouldBe("/key");
-      receivedValue.ShouldBe(Encoding.UTF8.GetBytes("/value"));
+      receivedKey.ShouldBe("key");
+      receivedValue.ShouldBe(Encoding.UTF8.GetBytes("value"));
       receivedValue.ShouldBe(assignedKv.Single().Value);
 
       await updater.Stop();

@@ -13,7 +13,7 @@ namespace Tests.typed
     {
       var demo = new SimpleProperties();
       Structure.Start(demo, TestOptions<SimpleProperties>("[]"));
-      DiscoveredKeys.ShouldContainKey("/keystring");
+      DiscoveredKeys.ShouldContainKey("keystring");
     }
 
     [Fact]
@@ -21,7 +21,7 @@ namespace Tests.typed
     {
       var demo = new NestedProperties();
       Structure.Start(demo, TestOptions<NestedProperties>("[]"));
-      DiscoveredKeys.ShouldContainKey("/nested/keystring");
+      DiscoveredKeys.ShouldContainKey("nested/keystring");
     }
   }
 }
