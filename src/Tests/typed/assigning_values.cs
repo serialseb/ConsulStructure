@@ -15,6 +15,7 @@ namespace Tests.typed
       var demo = new SimpleProperties();
       var s = Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {Http.KV("unknown", "valuestring")} ]"));
       IgnoredKeys.ShouldContainKey("unknown");
+      KeyValuesAssigned.Count.ShouldBe(0);
       await s.Stop();
     }
 
@@ -24,6 +25,7 @@ namespace Tests.typed
       var demo = new SimpleProperties();
       var s = Structure.Start(demo, TestOptions<SimpleProperties>($@"[ {Http.KV("keystring", "valuestring")} ]"));
       demo.KeyString.ShouldBe("valuestring");
+      KeyValuesIgnored.Count.ShouldBe(0);
       await s.Stop();
     }
 

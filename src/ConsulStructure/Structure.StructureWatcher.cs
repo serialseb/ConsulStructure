@@ -55,8 +55,8 @@ namespace ConsulStructure
             ignored[kv.Key] = kv.Value;
           }
         }
-        _options.Events.KeyValuesesIgnored(ignored);
-        _options.Events.KeyValuesAssigned(assigned);
+        if (ignored.Any()) _options.Events.KeyValuesesIgnored(ignored);
+        if (assigned.Any()) _options.Events.KeyValuesAssigned(assigned);
       }
 
       public Task Close()

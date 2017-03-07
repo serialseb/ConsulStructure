@@ -6,7 +6,7 @@ using Microsoft.Owin;
 
 namespace Tests.Infrastructure
 {
-  public class ConsulSimulator
+  public class ConsulKvSimulator
   {
     int currentIndex = 0;
     AutoResetAwaitable onWrite = new AutoResetAwaitable();

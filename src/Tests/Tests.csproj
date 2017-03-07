@@ -78,7 +78,7 @@
     <Compile Include="Infrastructure\AbstractStructureTest.cs" />
     <Compile Include="Infrastructure\AutoResetAwaitable.cs" />
     <Compile Include="Infrastructure\AwaitableQueue.cs" />
-    <Compile Include="Infrastructure\ConsulSimulator.cs" />
+    <Compile Include="Infrastructure\ConsulKvSimulator.cs" />
     <Compile Include="Infrastructure\Http.cs" />
     <Compile Include="Infrastructure\OwinExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

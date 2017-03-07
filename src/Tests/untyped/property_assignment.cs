@@ -28,7 +28,7 @@ namespace Tests.untyped
 
       var updater = Structure.Start(keyReceiver, TestOptions());
 
-      ConsulSimulator.PutKey("key", "value");
+      ConsulKvSimulator.PutKey("key", "value");
       var assignedKv = await KeyValuesAssigned.Dequeue();
 
       receivedKey.ShouldBe(assignedKv.Single().Key);

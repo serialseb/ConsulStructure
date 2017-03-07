@@ -15,10 +15,10 @@ namespace Tests.Infrastructure
   {
     static HttpClient HttpClientSimulator(
       Structure.Options options,
-      ConsulSimulator simulator,
+      ConsulKvSimulator kvSimulator,
       Func<AppFunc, AppFunc> interceptor)
     {
-      Func<IOwinContext, Task> invoker = simulator.Invoke;
+      Func<IOwinContext, Task> invoker = kvSimulator.Invoke;
       if (interceptor != null)
         invoker = interceptor(invoker);
 
@@ -29,15 +29,12 @@ namespace Tests.Infrastructure
       return new HttpClient(new OwinClientHandler(appFunc)) {BaseAddress = options.ConsulUri};
     }
 
-    protected readonly AwaitableQueue<IEnumerable<KeyValuePair<string, object>>> KeyValuesAssigned =
-      new AwaitableQueue<IEnumerable<KeyValuePair<string, object>>>();
-
     protected readonly AwaitableQueue<Exception> HttpErrors = new AwaitableQueue<Exception>();
 
     protected readonly AwaitableQueue<Tuple<HttpRequestMessage, HttpResponseMessage, TimeSpan>> HttpSuccesses =
       new AwaitableQueue<Tuple<HttpRequestMessage, HttpResponseMessage, TimeSpan>>();
 
-    protected readonly ConsulSimulator ConsulSimulator = new ConsulSimulator();
+    protected readonly ConsulKvSimulator ConsulKvSimulator = new ConsulKvSimulator();
 
     internal Structure.Options TestOptions(
       Func<AppFunc, AppFunc> responseMiddleware = null,
@@ -47,7 +44,7 @@ namespace Tests.Infrastructure
       {
         Factories =
         {
-          HttpClient = options => HttpClientSimulator(options, ConsulSimulator, responseMiddleware)
+          HttpClient = options => HttpClientSimulator(options, ConsulKvSimulator, responseMiddleware)
         },
         Events =
         {

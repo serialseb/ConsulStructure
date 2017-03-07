@@ -37,13 +37,13 @@ namespace Tests.http
       var config = new SimpleProperties();
       var updater = Structure.Start(config, TestOptions());
 
-      ConsulSimulator.PutKey("keystring", "first");
+      ConsulKvSimulator.PutKey("keystring", "first");
       await KeyValuesAssigned.Dequeue();
 
       config.KeyString.ShouldBe("first");
 
       await Task.WhenAll(
-        ConsulSimulator.PutKeyWithDelay("keystring", "second", TimeSpan.FromSeconds(3)),
+        ConsulKvSimulator.PutKeyWithDelay("keystring", "second", TimeSpan.FromSeconds(3)),
         KeyValuesAssigned.Dequeue());
 
       config.KeyString.ShouldBe("second");
@@ -55,8 +55,8 @@ namespace Tests.http
     {
       var config = new SimpleProperties();
 
-      ConsulSimulator.PutKey("keystring", "first");
-      ConsulSimulator.PutKey("keystring", "second");
+      ConsulKvSimulator.PutKey("keystring", "first");
+      ConsulKvSimulator.PutKey("keystring", "second");
 
       var updater = Structure.Start(config, TestOptions());
 
@@ -73,7 +73,7 @@ namespace Tests.http
       var config = new SimpleProperties();
       var updater = Structure.Start(config, TestOptions());
 
-      ConsulSimulator.PutKey("keystring", "http");
+      ConsulKvSimulator.PutKey("keystring", "http");
       await KeyValuesAssigned.Dequeue();
 
       config.KeyString.ShouldBe("http");
@@ -86,7 +86,7 @@ namespace Tests.http
       var config = new SimpleProperties();
       var updater = Structure.Start(config, TestOptions());
 
-      ConsulSimulator.PutKey("keystring", "http");
+      ConsulKvSimulator.PutKey("keystring", "http");
       var result = await HttpSuccesses.Dequeue();
 
       result.Item1.RequestUri.AbsolutePath.ShouldStartWith("/v1/kv/");
