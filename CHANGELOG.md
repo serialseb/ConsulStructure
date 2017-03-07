@@ -5,6 +5,16 @@ here's a changelog for ConsulStrucutre!
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.0.4]
+### Fixed
+ - Slashing your way through configuration is what this project is
+   about. Unfortunately, keys in consul don't start with a /, and
+   my simulator did, because i don't have a test rig for it yet. So
+   I slashed the slash, and now it works.
+ - Events are good, but too much of a good thing is, well, not such
+   a good thing. Key/Value events now only trigger when there's a
+   good reason for it, like actually having key values.
+
 ## [0.0.3]
 ### Added
  - I think it's rude to respond to requests with an error, but I'm not
