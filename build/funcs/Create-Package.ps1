@@ -14,19 +14,19 @@ if ($env:APPVEYOR_REPO_TAG -eq $true) {
     $releaseNotes = (Get-GitHubRepo "releases/tags/$($env:APPVEYOR_REPO_TAG_NAME)").body.Replace('"','\"').Replace('### ', '')
 }
 
-$authors =  (git shortlog -sn | ? { $_ -match '^\s*(?<count>\d+)\s*(?<author>.*)$' } | % {"$($matches["author"]) ($($matches["count"]))" }) -join ', '
+$authors =  (git shortlog -sn --all | ? { $_ -match '^\s*(?<count>\d+)\s*(?<author>.*)$' } | % {"$($matches["author"]) ($($matches["count"]))" }) -join ', '
 $description = $repoInfo.description
 $licenseUrl = "https://github.com/$($env:APPVEYOR_REPO_NAME)/tree/$env:APPVEYOR_REPO_COMMIT/LICENSE.md"
 $projectUrl = "https://github.com/$($env:APPVEYOR_REPO_NAME)/"
-write-host "Release notes: $releaseNotes"
-write-host "License: $authors"
-write-host "Authors: $licenseUrl"
 
-& nuget pack $nuspecPath.nuspec -Properties releaseNotes="$releaseNotes" `
-    -Properties "authors=$authors" `
-    -Properties "licenseUrl=$licenseUrl" `
-    -Properties "projectUrl=$projectUrl" `
-    -Properties "description=$description" `
+write-host "Release notes: $releaseNotes"
+write-host "License URL: $licenseUrl"
+write-host "Authors: $authors"
+write-host "Project URL: $projectUrl"
+
+& nuget pack $nuspecPath.nuspec `
     -version $env:NUGET_VERSION `
-    -basepath $env:APPVEYOR_BUILD_FOLDER/src/$env:SEB_PROJECT_NAME/
+    -basepath $env:APPVEYOR_BUILD_FOLDER/src/$env:SEB_PROJECT_NAME/ `
+    -Properties releaseNotes="$releaseNotes"`;authors="$authors"`;licenseUrl="$licenseUrl"`;projectUrl="$projectUrl"`;description="$description"
+
 Push-AppveyorArtifact *.nupkg
