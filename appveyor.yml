@@ -41,10 +41,9 @@ build:
   include_nuget_references: true
   project: src/ConsulStructure.sln
 
-init:
- - nuget install SerialSeb.Build -Pre -OutputDirectory . -ExcludeVersion -Source https://ci.appveyor.com/nuget/serialseb-build-uas1ftbnwxfh
-
 install:
+  - nuget install SerialSeb.Build -Pre -OutputDirectory . -ExcludeVersion -Source https://ci.appveyor.com/nuget/serialseb-build-uas1ftbnwxfh
+
   - ps: ./SerialSeb.Build/Install.ps1
 
 before_build:
