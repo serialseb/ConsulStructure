@@ -1,1 +1,0 @@
-& $env:SEB_FUNCS/Build-Solution.ps1
