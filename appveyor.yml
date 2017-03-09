@@ -43,7 +43,6 @@ build:
 
 install:
   - nuget install SerialSeb.Build -Pre -OutputDirectory . -ExcludeVersion -Source https://ci.appveyor.com/nuget/serialseb-build-uas1ftbnwxfh
-
   - ps: ./SerialSeb.Build/Install.ps1
 
 before_build:
