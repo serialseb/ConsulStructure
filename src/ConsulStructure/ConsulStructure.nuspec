@@ -22,7 +22,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="**/*.cs" exclude="bin/**/*.*;obj/**/*.*;Properties/**/*.*;Tests/**/*" target="contentFiles/cs/any/App_Packages/ConsulStructure.$version$" />
-    <file src="**/*.cs" exclude="bin/**/*.*;obj/**/*.*;Properties/**/*.*;Tests/**/*" target="content/App_Packages/ConsulStructure.$version$" />
+    <!--<file src="**\*.cs" exclude="**\bin\**\*.*;obj\;obj\**\*.*;**\Properties\" target="contentFiles\cs\any\App_Packages\ConsulStructure.$version$" />-->
+    <file src="**\*.cs" exclude="**/AssemblyInfo.cs" target="content\App_Packages\ConsulStructure.$version$" />
   </files>
 </package>

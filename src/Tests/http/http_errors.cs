@@ -94,7 +94,7 @@ namespace Tests.http
     [Fact]
     public async Task retries_on_errors_until_successful()
     {
-      int retries = 0;
+      var retries = 0;
       var listener = Structure.Start(
         new SimpleProperties(),
         TestOptions(next => env => (retries++ < 1 ? env.Response(500) : next(env))));
